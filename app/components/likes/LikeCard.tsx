@@ -13,7 +13,7 @@ export default function LikeCard({
 }: {
   l: Like;
   carousel?: boolean;
-  layout?: "circle" | "square" | "portrait"; // 1. 新增 "portrait" 直向海報比例支援
+  layout?: "circle" | "square" | "portrait" | "landscape"; // 1. 新增 "portrait" 直向海報比例支援
   onClick?: () => void;
   live?: LiveInfo;
   priority?: boolean;

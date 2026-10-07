@@ -27,15 +27,15 @@ const STATIC_PAGES: SearchItem[] = [
   { id: "page-likes", title: "喜歡的東西", href: "/likes", category: "頁面" },
   {
     id: "page-writing",
-    title: "碎碎念",
+    title: "隨筆",
     href: "/writing",
     category: "頁面",
   },
   { id: "page-api", title: "端點", href: "/api", category: "頁面" },
-  { id: "page-links", title: "友鏈", href: "/links", category: "頁面" },
+  { id: "page-links", title: "知交", href: "/links", category: "頁面" },
   {
     id: "page-experience",
-    title: "經歷",
+    title: "閱歷",
     href: "/experience",
     category: "頁面",
   },
@@ -68,7 +68,7 @@ const LINK_ITEMS: SearchItem[] = LINKS.map((l, i) => ({
   sub: l.desc,
   href: l.href,
   external: true,
-  category: "友鏈",
+  category: "知交",
 }));
 
 const EXPERIENCE_ITEMS: SearchItem[] = EXPERIENCE.map((e, i) => ({
@@ -76,7 +76,7 @@ const EXPERIENCE_ITEMS: SearchItem[] = EXPERIENCE.map((e, i) => ({
   title: e.title,
   sub: e.org,
   href: "/experience",
-  category: "經歷",
+  category: "閱歷",
 }));
 
 const ALL_ITEMS: SearchItem[] = [

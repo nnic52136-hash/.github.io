@@ -85,7 +85,7 @@ export default function Header() {
       <header className="header">
         <div className="header-inner">
           <Link className="logo" href="/" style={{ textDecoration: "none" }}>
-            itouSouta.me
+            Yase Origin
           </Link>
           <div className="header-right">
             <nav className="nav">

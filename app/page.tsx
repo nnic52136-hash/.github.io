@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { pageMetadata, SITE_DESCRIPTION } from "./lib/seo";
 import { ROLES } from "./data";
 import GithubGlyph from "./components/GithubGlyph";
 import GithubContributionCard from "./components/home/GithubContributionCard";
-import TagCloudWidget from "./components/home/TagCloudWidget";
 import {
   LanyardProvider,
   ProfileStatus,
@@ -17,8 +17,14 @@ import BadgeShape from "./components/home/BadgeShape";
 import NameRotator from "./components/home/NameRotator";
 import DecorativeImage from "./components/DecorativeImage";
 
+// 👈 關鍵修正：將會用到 window 的 TagCloudWidget 改為動態載入並關閉 SSR
+const TagCloudWidget = dynamic(
+  () => import("./components/home/TagCloudWidget"),
+  { ssr: false }
+);
+
 export const metadata: Metadata = pageMetadata({
-  title: "一切的原點",
+  title: "Yase Origin",
   description: SITE_DESCRIPTION,
   path: "/",
   absolute: true,

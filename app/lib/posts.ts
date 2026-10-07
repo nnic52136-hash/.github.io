@@ -17,6 +17,7 @@ export interface Post {
   wordCount: number;
   readingTime: number;
   content: string;
+  likesCount?: number; // 👈 支援按讚數型別
 }
 
 export type PostSummary = Omit<Post, "content">;
@@ -112,6 +113,7 @@ export function getPostBySlug(slug: string): Post | null {
       wordCount: stats.wordCount,
       readingTime: stats.readingTime,
       content,
+      likesCount: Number(data.likesCount) || 0, // 👈 確保每篇文章都有預設按讚數
     };
   } catch {
     return null;

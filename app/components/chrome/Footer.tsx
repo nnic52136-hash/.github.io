@@ -55,7 +55,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link href="/" className="footer-logo">
-              一切的原點
+              Yase Origin
             </Link>
             <p className="footer-tagline">
               來世所及，

@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "原 的個人網站",
     short_name: "亞瑟原",
-    description: "一切的原點",
+    description: "Yase Origin",
     start_url: "/",
     display: "standalone",
     background_color: "#1b1e23",

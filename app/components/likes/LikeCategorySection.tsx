@@ -98,7 +98,7 @@ export default function LikeCategorySection({
             <LikeCard
               l={isInternalArticle ? lClean : l}
               carousel
-              layout={cat.layout}
+              layout={cat.layout === "landscape" ? "portrait" : cat.layout}
               priority={priorityImages && i < 2}
               live={l.href ? liveMap[l.href] : undefined}
             />

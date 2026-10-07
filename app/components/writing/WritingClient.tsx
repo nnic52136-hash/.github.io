@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import WritingReaction from "./WritingReaction";
 
 export interface PostItem {
   slug: string;
@@ -646,44 +647,44 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    {seriesPosts.map((post, idx) => {
-                      const orderDisplay = post.seriesOrder
-                        ? String(post.seriesOrder).padStart(2, "0")
-                        : String(idx + 1).padStart(2, "0");
-
-                      return (
-                        <Link
-                          key={post.slug}
-                          href={`/writing/${post.slug}`}
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: "10px 12px",
-                            borderRadius: "8px",
-                            textDecoration: "none",
-                            color: "var(--tx)",
-                            fontSize: "0.875rem",
-                            background: "var(--inset)",
-                            transition: "all 0.2s ease",
-                          }}
-                        >
-                          <div style={{ display: "flex", alignItems: "center", gap: "10px", overflow: "hidden" }}>
-                            <span style={{ fontSize: "0.75rem", fontFamily: "monospace", color: "var(--dim)", flexShrink: 0 }}>
-                              {orderDisplay}.
-                            </span>
-                            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                              {post.title}
-                            </span>
-                          </div>
-                          {post.readingTime && (
-                            <span style={{ fontSize: "0.75rem", color: "var(--dim)", flexShrink: 0, marginLeft: "12px" }}>
-                              {post.readingTime}m
-                            </span>
-                          )}
-                        </Link>
-                      );
-                    })}
+                    {seriesPosts.map((post, idx) => (
+                      <Link
+                        key={post.slug}
+                        href={`/writing/${post.slug}`}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "8px 10px",
+                          borderRadius: "8px",
+                          background: "var(--inset)",
+                          border: "1px solid var(--bd)",
+                          color: "var(--tx)",
+                          textDecoration: "none",
+                          fontSize: "0.88rem",
+                          transition: "all 0.15s ease",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden" }}>
+                          <span style={{ fontSize: "0.78rem", color: "var(--dim)", minWidth: "18px" }}>
+                            {post.seriesOrder ? `#${post.seriesOrder}` : `#${idx + 1}`}
+                          </span>
+                          <span
+                            style={{
+                              fontWeight: 500,
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {post.title}
+                          </span>
+                        </div>
+                        <span style={{ fontSize: "0.75rem", color: "var(--dim)", flexShrink: 0, marginLeft: "8px" }}>
+                          {post.date}
+                        </span>
+                      </Link>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -691,23 +692,6 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
           )}
         </main>
       </div>
-
-      {/* RWD 響應式微調 */}
-      <style jsx global>{`
-        @media (max-width: 900px) {
-          .writing-layout-container {
-            grid-template-columns: 1fr !important;
-          }
-          .writing-left-sidebar {
-            position: static !important;
-          }
-        }
-        .thought-item:hover {
-          transform: translateY(-2px);
-          border-color: var(--bd2) !important;
-          box-shadow: 0 8px 24px var(--shadow);
-        }
-      `}</style>
     </div>
   );
 }

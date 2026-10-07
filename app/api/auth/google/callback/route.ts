@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { signGoogleIdentity } from "../../../lib/googleAuth"; // 替換為你的 Google 身份簽署邏輯
+import { signGoogleIdentity } from "../../../../lib/googleAuth"; // 替換為你的 Google 身份簽署邏輯
 import { normalizePath } from "../../../../lib/path";
 
 export async function GET(req: NextRequest) {

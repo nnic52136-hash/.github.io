@@ -14,9 +14,9 @@ export default function ProjectModalShell({
   children,
 }: {
   kicker: string;
-  kickerColor: "blue" | "purple";
+  kickerColor?: string;
   title: string;
-  desc: string;
+  desc?: string;
   onClose: () => void;
   children: React.ReactNode;
 }) {

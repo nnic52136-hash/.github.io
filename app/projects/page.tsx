@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
 export const revalidate = 3600;
 
 export default async function ProjectsPage() {
-  // GitHub 數據在 server 端一次抓齊傳給 client，開 modal 時零延遲
+  // GitHub 數據在 server 端一次抓齊傳給 client，開 modal 時零延遲http://localhost:3000/likes
   const [repoInfoBySlug, releasesBySlug] = await Promise.all([
     getAllRepoInfo(PROJECTS),
     getAllReleases(PROJECTS),

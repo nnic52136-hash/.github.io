@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "itousouta.me",
-    short_name: "itouSouta",
-    description: "itouSouta / 郭家睿 / 伊藤蒼太的個人網站 ε(*´･∀･｀)зﾞ",
+    name: "原 的個人網站",
+    short_name: "亞瑟原",
+    description: "一切的原點",
     start_url: "/",
     display: "standalone",
     background_color: "#1b1e23",

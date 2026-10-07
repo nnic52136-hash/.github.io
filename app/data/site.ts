@@ -4,11 +4,9 @@ export interface Role {
 }
 
 export const ROLES: Role[] = [
-  { label: "A Student", color: "blue" },
-  { label: "Mankind", color: "blue" },
-  { label: "Dev.", color: "purple" },
-  { label: "Vocalo-P", color: "purple" },
-  { label: "Illust.", color: "purple" },
+  { label: "自學生", color: "blue" },
+  { label: "DEVELOPER", color: "blue" },
+  { label: "Creater", color: "purple" },
 ];
 
 export const TILE_COLS: string[][] = [
@@ -19,13 +17,12 @@ export const TILE_COLS: string[][] = [
 
 export const MARQUEE: string[] = [
   "ciallo (∠·ω )⌒★",
-  "I'm itouSouta",
-  "郭家睿",
-  "伊藤蒼太",
-  "人間になりたい",
+  "I'm Yase",
+  "李中原",
+  "亞瑟原",
   "DEVELOPER",
-  "VOCALO-P",
-  "ILLUSTRATOR",
-  "情熱を失っては、何もできない。",
+  "ENFP-T",
+  "Creater",
+  "來世所及，皆為體驗",
   "Zzzz",
 ];

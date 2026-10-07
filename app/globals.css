@@ -148,23 +148,34 @@ svg {
    [data-theme] before first paint — no dark→light flash. The .root wrapper only
    consumes the inherited tokens for its background/sizing. */
 :root {
-  --bg: #18191c;
-  --panel: #232426;
-  --panel2: #232426;
-  --panel2-a: rgba(36, 37, 41, 0.82);
-  --frost: #23242b73;
-  --inset: #1b1d20;
-  --bd: rgba(255, 255, 255, 0.07);
-  --bd2: rgba(255, 255, 255, 0.14);
-  --dc-act-back: #131618;
-  --tx: #e8ebf2;
-  --dim: #9aa1ad;
-  --mute: #6a7280;
-  --blue: #b8c4f8;
-  --purple: #a1ade0;
-  --btn: #94a6cc;
-  --btntx: #24272c;
-  --shadow: rgba(0, 0, 0, 0.45);
+  /* 核心色彩（暗色模式：夢幻星空銀河系 Starry Night Aesthetic） */
+  --bg: #090D21;            /* 深空夜藍背景 */
+  --panel: #151A36;         /* 暗夜紫藍板塊 / 卡片 */
+  --panel2: #181E3F;        /* 次要板塊 */
+  --panel2-a: rgba(24, 30, 63, 0.85); /* 半透明板塊 */
+  --frost: rgba(21, 26, 54, 0.65);    /* Loader 毛玻璃背景 */
+  --inset: #0F132C;         /* 內凹區塊 / 行內代碼背景 */
+  --bd: rgba(181, 153, 183, 0.16);    /* 淡粉紫星光邊框 */
+  --bd2: rgba(212, 178, 216, 0.30);   /* 高光邊框 */
+  --dc-act-back: #070A1C;   /* 深夜滾動區背景 */
+
+  /* 文字與星光/星雲點綴色 */
+  --tx: #F3E8F2;            /* 主要文字（星光柔白） */
+  --dim: #B599B7;           /* 次要文字（淡紫星灰） */
+  --mute: #71698B;          /* 靜音文字（夜紫灰） */
+  --blue: #889CE8;          /* 主要強調色（星空寶藍） */
+  --purple: #D48CB3;        /* 次要強調色（粉紫星雲光輝） */
+  --btn: #B599B7;           /* 按鈕背景 */
+  --btntx: #090D21;         /* 按鈕文字 */
+  --shadow: rgba(5, 8, 20, 0.6);
+
+  /* 文章模組相容別名 */
+  --background: var(--bg);
+  --foreground: var(--tx);
+  --card-bg: var(--panel);
+  --border: var(--bd);
+  --muted: var(--dim);
+  --surface-subtle: var(--inset);
 
   background: var(--bg);
 }
@@ -175,9 +186,10 @@ svg {
   font-family: "Noto Sans TC", system-ui, sans-serif;
   background:
     radial-gradient(
-      1100px 560px at 72% -12%,
-      rgba(141, 181, 200, 0.11),
-      transparent 60%
+      1200px 650px at 70% -10%,
+      rgba(212, 140, 179, 0.18),  /* 圖片右上角的粉紫星雲擴散光 */
+      rgba(136, 156, 232, 0.12) 40%, /* 星空寶藍漸層 */
+      transparent 75%
     ),
     var(--bg);
   transition:
@@ -186,28 +198,35 @@ svg {
 }
 
 :root[data-theme="light"] {
-  --bg: #dadadd;
-  --panel: #f0f0f5;
-  --panel2: #f0f0f5;
-  --panel2-a: rgba(227, 228, 233, 0.82);
-  --frost: rgba(224, 225, 235, 0.45);
-  --inset: #e1e3ec;
-  --bd: rgba(6, 6, 7, 0.08);
-  --bd2: rgba(20, 24, 40, 0.16);
-  --dc-act-back: rgba(13, 13, 15, 0.14);
-  --tx: #22262d;
-  --dim: #494f59; /* was #5b626d — darkened for WCAG AA contrast on panel bg */
-  --mute: #6b7280; /* was #8a909b — darkened to improve readability */
-  --blue: #364a7c;
-  --purple: #5c7cbf;
-  --btn: #2b2f36;
-  --btntx: #f2f4f9;
-  --shadow: rgba(60, 70, 90, 0.16);
+  /* 核心色彩（亮色模式） */
+  --bg: #EAE1DF;
+  --panel: #F5EFEA;
+  --panel2: #F5EFEA;
+  --panel2-a: rgba(245, 239, 234, 0.82);
+  --frost: rgba(234, 225, 223, 0.45);
+  --inset: #DFD5D2;
+  --bd: rgba(84, 94, 86, 0.12);
+  --bd2: rgba(84, 94, 86, 0.22);
+  --dc-act-back: rgba(84, 94, 86, 0.08);
+  --tx: #3C443E;
+  --dim: #545E56;
+  --mute: #917C78;
+  --blue: #667761;
+  --purple: #B79492;
+  --btn: #545E56;
+  --btntx: #EAE1DF;
+  --shadow: rgba(84, 94, 86, 0.16);
+
+  /* 文章模組相容別名 */
+  --background: var(--bg);
+  --foreground: var(--tx);
+  --card-bg: var(--panel);
+  --border: var(--bd);
+  --muted: var(--dim);
+  --surface-subtle: var(--inset);
 }
 
-/* ---- 季節 accent（SeasonTint 依日期設 data-season）----
-   只覆寫 --blue/--purple 兩個 accent 色票，深淺主題各給一版。放在 theme 區塊
-   之後，同 specificity 靠後者勝出。 */
+/* ---- 季節 accent（SeasonTint 依日期設 data-season）---- */
 :root[data-season="halloween"] {
   --blue: #ffa84c;
   --purple: #c08cff;
@@ -4995,9 +5014,9 @@ a.guestbook-nick:hover {
   mask-image: url("/assets/icons/si-github.svg");
   -webkit-mask-image: url("/assets/icons/si-github.svg");
 }
-.si-x .footer-si-icon {
-  mask-image: url("/assets/icons/si-x.svg");
-  -webkit-mask-image: url("/assets/icons/si-x.svg");
+.si-linkedin .footer-si-icon {
+  mask-image: url("/assets/icons/si-linkedin.svg");
+  -webkit-mask-image: url("/assets/icons/si-linkedin.svg");
 }
 .si-discord .footer-si-icon {
   mask-image: url("/assets/icons/si-discord.svg");
@@ -5409,4 +5428,124 @@ a.guestbook-nick:hover {
     transition: none !important;
     transform: none !important;
   }
+}
+/* ===========================================================================
+   文章模組 (Writing/Post) 亮暗色變數映射與 MDX 樣式 (直接貼在最下方)
+   =========================================================================== */
+
+/* 1. 自動對齊專案既有的 --bg, --tx, --panel 等變數 */
+:root {
+  --background: var(--bg);
+  --foreground: var(--tx);
+  --card-bg: var(--panel);
+  --border: var(--bd);
+  --muted: var(--dim);
+  --surface-subtle: var(--inset);
+}
+
+:root[data-theme="light"] {
+  --background: var(--bg);
+  --foreground: var(--tx);
+  --card-bg: var(--panel);
+  --border: var(--bd);
+  --muted: var(--dim);
+  --surface-subtle: var(--inset);
+}
+
+/* 2. 文章詳情頁 (.post-container) 容器樣式 */
+.post-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: var(--tx);
+  background: transparent;
+  transition: color 0.35s ease;
+}
+
+/* 3. MDX 內文 (.markdown-body) 樣式 */
+.markdown-body {
+  color: var(--tx);
+  background: transparent;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  color: var(--tx);
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--bd);
+  padding-bottom: 0.3em;
+}
+
+.markdown-body p,
+.markdown-body li {
+  color: var(--tx);
+  opacity: 0.92;
+}
+
+/* 4. 連結與分隔線 */
+.markdown-body a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.divider,
+.markdown-body hr {
+  height: 1px;
+  background-color: var(--bd);
+  border: none;
+  margin: 2rem 0;
+}
+
+/* 5. 程式碼區塊 */
+.markdown-body code {
+  background-color: var(--inset);
+  color: var(--tx);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.9em;
+}
+
+.markdown-body pre {
+  background-color: var(--panel);
+  border: 1px solid var(--bd2);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.markdown-body pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* 6. 表格樣式 (GFM) */
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--bd);
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.markdown-body th {
+  background-color: var(--inset);
+  color: var(--tx);
+  font-weight: 600;
+}
+
+.markdown-body td {
+  color: var(--tx);
 }

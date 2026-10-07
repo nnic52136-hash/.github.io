@@ -11,7 +11,6 @@ import {
 } from "../../lib/kv";
 import { normalizePath } from "../../lib/path";
 import { gravatarUrl, isValidEmail } from "../../lib/gravatar";
-import { verifyGithubIdentity } from "../../lib/githubAuth";
 import { sendReplyNotification } from "../../lib/notify";
 
 /* 留言板：讀取與送出都走這裡（KV 自建，取代原本連部落格 waline 伺服器的方案——
@@ -61,7 +60,7 @@ interface Identity {
   nick: string;
   avatar: string | null;
   link: string | null;
-  source: "manual" | "github";
+  source: "manual";
   email: string | null;
 }
 
@@ -69,22 +68,7 @@ function resolveIdentity(body: {
   nick?: string;
   email?: string;
   website?: string;
-  githubToken?: string;
 }): Identity | { error: string } {
-  if (body.githubToken) {
-    const gh = verifyGithubIdentity(body.githubToken);
-    if (!gh) {
-      return { error: "GitHub 登入已過期，請重新登入" };
-    }
-    return {
-      nick: gh.login,
-      avatar: gh.avatarUrl,
-      link: gh.profileUrl,
-      source: "github",
-      email: gh.email && isValidEmail(gh.email) ? gh.email.toLowerCase() : null,
-    };
-  }
-
   const nick = (body.nick ?? "").trim();
   if (nick.length < 2 || nick.length > NICK_MAX) {
     return { error: `暱稱需 2~${NICK_MAX} 字` };
@@ -136,7 +120,6 @@ export async function POST(req: NextRequest) {
       website?: string;
       hp?: string;
       path?: string;
-      githubToken?: string;
       commentId?: string;
       parentId?: string;
     } | null;

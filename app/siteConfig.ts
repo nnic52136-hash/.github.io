@@ -2,5 +2,5 @@
    而 LanyardCards 是掛在首頁的 client component——它只要一個 Discord ID，卻會
    因為 import 自 data.ts 而把整包 PROJECTS / LIKE_CATEGORIES 拖進首頁的 JS
    bundle（實測 /page 的 chunk 會多背 58KB）。放這裡就只帶走這一行。 */
-export const DISCORD_USER_ID = "942765194571055164";
-export const GITHUB_USERNAME = "itousouta15";
+export const DISCORD_USER_ID = "1408816377523077301";
+export const GITHUB_USERNAME = "nnic52136-hash";

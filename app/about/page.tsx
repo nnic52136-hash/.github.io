@@ -1,29 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHead from "../components/PageHead";
-import { LIKE_CATEGORIES, MUSIC_ARTISTS } from "../data";
+import { LIKES_DATA } from "../data/likes";
 import { likeThumb, cardBgThumb, artistAvatarThumb } from "../lib/imageThumb";
-import { getTopTracks } from "../lib/spotify";
 import { pageMetadata } from "../lib/seo";
 
-// Spotify「最近常聽」每小時重抓一次
 export const revalidate = 3600;
 
-const description = "itouSouta（伊藤蒼太 / 郭家睿）的自我介紹 (*´з｀*)";
+const description = "Yase（亞瑟原 / 李中原）的個人簡介 (*´з｀*)";
 
-// ===== 卡片背景圖入口：想換背景改這兩行 =====
-// 可填外部圖片網址，或把圖片放進 public/assets 後填 "/assets/分類/檔名.webp"
 const INTEREST_BG = "/assets/likes/neko.webp";
 const MUSIC_BG = "/assets/likes/nacho.webp";
 
-const ANIME_PREVIEW = (
-  LIKE_CATEGORIES.find((c) => c.key === "anime")?.items ?? []
-)
-  .slice()
-  .sort((a, b) => (b.personRating ?? 0) - (a.personRating ?? 0))
-  .slice(0, 6);
-
-const MUSIC_PREVIEW = MUSIC_ARTISTS.filter((a) => a.avatar).slice(0, 4);
+const BOOKS_PREVIEW = LIKES_DATA.filter((item) => item.category === "books").slice(0, 4);
+const SINGERS_PREVIEW = LIKES_DATA.filter((item) => item.category === "singers").slice(0, 4);
 
 export const metadata: Metadata = pageMetadata({
   title: "關於我",
@@ -31,45 +21,39 @@ export const metadata: Metadata = pageMetadata({
   path: "/about",
 });
 
-export default async function AboutPage() {
-  const topAlbums = await getTopTracks({ limit: 4, timeRange: "short_term" });
+export default function AboutPage() {
   return (
     <section style={{ paddingBottom: 8 }}>
       <PageHead kicker="ABOUT" title="關於我" />
       <div className="about-grid">
         <div className="about-main">
-          <div className="about-lead">ciallo～ 我是 itouSouta</div>
+          <div className="about-lead">這裡是原</div>
           <p className="about-p">
-            一個喜歡 VOCALOID 和畫插畫的怪人。
-            會做點術曲和畫點插畫插畫，偶爾寫點程式/ᐠ｡ꞈ｡ᐟ\
+            熱衷於 Web 開發、AI 自動化流程與軟硬體實驗的自學生。
           </p>
           <p className="about-p">
-            嗯....我也想把自己說的好像很厲害，但感覺這樣蠻家豪的。反正我就是一個無聊的高中生
+            專注於探索 Component-driven 系統架構、前端 UI/UX 設計與軟體建構。
           </p>
           <p className="about-p">
-            目前是臺中市立大里高中的學生，同時擔任校內資訊校隊隊長，也是第五屆
-            SCAICT
-            中部高中電資社團聯合會議會長。平常喜歡到處跑，順便認識一堆電到爆的人們
-          </p>
-          <p className="about-p">
-            除了寫程式之外，對資安也稍微有點興趣。座右銘是「情熱を失っては、何もできない」，希望自己能一直保持這份熱情，把想做的事情一件一件做出來
+            除了寫程式與探索新技術外，平常也喜歡閱讀漫畫、音樂賞析與參與各類實體交流活動。
           </p>
           <div className="divider" />
           <div className="stat-grid">
             <div className="stat">
               <div className="stat-k">本名</div>
-              <div className="stat-v">郭家睿</div>
+              <div className="stat-v">李中原</div>
             </div>
             <div className="stat">
               <div className="stat-k">別名</div>
-              <div className="stat-v">伊藤蒼太</div>
+              <div className="stat-v">亞瑟原 / Yase</div>
             </div>
             <div className="stat">
               <div className="stat-k">生日</div>
-              <div className="stat-v mono">2009/01/15</div>
+              <div className="stat-v mono">2010/06/26</div>
             </div>
           </div>
         </div>
+
         <div className="about-side">
           <img
             src="/assets/brand/banner-400.webp"
@@ -82,11 +66,13 @@ export default async function AboutPage() {
           <div className="about-side-body">
             <div className="label">座右銘</div>
             <div className="about-side-quote">
-              情熱を失っては、何もできない。
+              來世所及，皆為體驗
             </div>
           </div>
         </div>
-        <Link href="/likes/anime" className="mini-card mini-interest">
+
+        {/* 1. 書籍收藏預覽卡片（指向 /likes/books） */}
+        <Link href="/likes/books" className="mini-card mini-interest">
           <img
             className="mini-interest-bg"
             src={cardBgThumb(INTEREST_BG)}
@@ -96,14 +82,14 @@ export default async function AboutPage() {
             decoding="async"
           />
           <div className="mini-kicker">愛好</div>
-          <div className="mini-interest-title">追番</div>
+          <div className="mini-interest-title">書籍</div>
           <div className="mini-interest-stack">
-            {ANIME_PREVIEW.slice(0, 4).map((item, i) => (
+            {BOOKS_PREVIEW.map((item, i) => (
               <img
-                key={item.title}
+                key={item.id || item.title}
                 className="mini-interest-stack-img"
                 style={{ "--i": i } as React.CSSProperties}
-                src={likeThumb(item.cover!)}
+                src={likeThumb(item.coverImage)}
                 alt={item.title}
                 loading="lazy"
                 decoding="async"
@@ -112,7 +98,9 @@ export default async function AboutPage() {
           </div>
           <span className="mini-arrow">↗</span>
         </Link>
-        <Link href="/likes/music" className="mini-card mini-music">
+
+        {/* 2. 音樂/歌手收藏預覽卡片（指向 /likes/singers） */}
+        <Link href="/likes/singers" className="mini-card mini-music">
           <img
             className="mini-interest-bg"
             src={cardBgThumb(MUSIC_BG)}
@@ -121,35 +109,20 @@ export default async function AboutPage() {
             loading="lazy"
             decoding="async"
           />
-          <div className="mini-kicker">
-            {topAlbums ? "愛好 · 最近常聽" : "愛好"}
-          </div>
+          <div className="mini-kicker">愛好</div>
           <div className="mini-interest-title">音樂</div>
           <div className="mini-music-avatars">
-            {topAlbums
-              ? topAlbums.map((t, i) => (
-                  <img
-                    key={t.href || t.title}
-                    className="mini-music-avatar mini-music-avatar--track"
-                    style={{ "--i": i } as React.CSSProperties}
-                    src={t.cover}
-                    alt={t.title}
-                    title={`${t.title} — ${t.artist}`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ))
-              : MUSIC_PREVIEW.map((a, i) => (
-                  <img
-                    key={a.name}
-                    className="mini-music-avatar"
-                    style={{ "--i": i } as React.CSSProperties}
-                    src={artistAvatarThumb(a.avatar!)}
-                    alt={a.name}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ))}
+            {SINGERS_PREVIEW.map((a, i) => (
+              <img
+                key={a.id || a.title}
+                className="mini-music-avatar"
+                style={{ "--i": i } as React.CSSProperties}
+                src={artistAvatarThumb(a.coverImage)}
+                alt={a.title}
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
           </div>
           <span className="mini-arrow">↗</span>
         </Link>

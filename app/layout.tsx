@@ -27,21 +27,16 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "itouSouta",
-    "itousouta15",
-    "郭家睿",
-    "伊藤蒼太",
-    "VOCALOID",
-    "SCAICT",
-    "大里高中",
+    "亞瑟原",
+    "Yase",
+    "李中原",
+    "電子科",
+    "自學生",
+    "全端開發",
     "個人網站",
   ],
-  authors: [{ name: "郭家睿 / 伊藤蒼太", url: SITE_URL }],
-  creator: "郭家睿 / 伊藤蒼太",
-  /* 這裡刻意不寫 alternates.canonical。metadata 最外層欄位會往下繼承，root 若
-     釘一個 canonical: "/"，任何忘記自己設的新頁面都會宣告「我的正規網址是首頁」
-     ——Google 看到就把那頁從索引裡丟掉。canonical 一律由各頁自己用
-     pageMetadata() 產生，忘了寫最多是沒有 canonical，不會指錯人。 */
+  authors: [{ name: "李中原 / 亞瑟原", url: SITE_URL }],
+  creator: "李中原 / 亞瑟原",
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
@@ -68,7 +63,7 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant" suppressHydrationWarning>
       <head>
-        {/* Apply the saved theme before first paint to avoid a dark→light flash. */}
+        {/* 防止主題亮暗閃爍 (FOUC) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{
@@ -78,15 +73,7 @@ export default function RootLayout({
 }catch(e){}})();`,
           }}
         />
-        {/* Reveal the splash once the document is parsed. The loader only
-            covers FOUC and the theme is already applied above, so there is no
-            reason to wait for React hydration: the slide runs in parallel with
-            hydration (Lighthouse 量到的 LCP render delay 有 ~2s 都卡在這裡）。
-            時序分成三段，還原「遮罩先滑走、header 才掉下來」的進場節奏：
-              1. 雙 rAF   → site-loading（等首幀畫完才上毛玻璃 blur，避開黑閃）
-              2. DCL+300  → site-revealing（遮罩開始上滑，450ms）
-              3. DCL+750  → site-revealed（header 進場、捲動解鎖）
-            DOM 解析完後多停 300ms，讓遮罩不會閃一下就消失。 */}
+        {/* 開場 Splash Screen 動畫時序控制 */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){
@@ -114,12 +101,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* These stylesheets are large (Google Fonts CJK weights + a homepage-only
-            webfont service) and were render-blocking ~3.8s of first paint.
-            They're fetched eagerly but applied via JS once the browser is idle
-            so initial paint isn't gated on them; existing font-stacks already
-            fall back to system fonts. ChenYuLuoYan 已自架子集（見 globals.css
-            的 @font-face），不再走 emfont。 */}
         <link
           rel="preload"
           as="style"
@@ -152,10 +133,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body>
-        {/* 「郭家睿 / 伊藤蒼太 / itouSouta 是同一個人」這件事，Google 只能靠
-            sameAs 把散在各站的身分串起來——原本只掛了一個部落格，等於沒串。
-            拆成 @graph 兩個實體並用 @id 互指，是為了讓 WebSite 明確指向作者，
-            Google 判斷網站名稱時也優先看 WebSite.name（SERP 上顯示的站名）。 */}
+        {/* JSON-LD 結構化資料：修正為李中原個人身分與社群對應 */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -167,7 +145,7 @@ export default function RootLayout({
                   "@id": `${SITE_URL}/#website`,
                   url: SITE_URL,
                   name: SITE_TITLE,
-                  alternateName: ["itouSouta", "伊藤蒼太", "郭家睿"],
+                  alternateName: ["李中原", "亞瑟原", "Yase"],
                   inLanguage: "zh-Hant",
                   description: SITE_DESCRIPTION,
                   publisher: { "@id": `${SITE_URL}/#person` },
@@ -175,28 +153,27 @@ export default function RootLayout({
                 {
                   "@type": "Person",
                   "@id": `${SITE_URL}/#person`,
-                  name: "郭家睿",
-                  alternateName: ["伊藤蒼太", "itouSouta", "itouSouta15"],
+                  name: "李中原",
+                  alternateName: ["亞瑟原", "Yase", "豆乾"],
                   url: SITE_URL,
                   image: `${SITE_URL}/assets/brand/avatar.webp`,
                   description: SITE_DESCRIPTION,
                   knowsAbout: [
                     "軟體開發",
-                    "資訊安全",
-                    "VOCALOID",
-                    "插畫",
-                    "競技程式設計",
+                    "人工智能",
+                    "網頁開發",
+                    "嵌入式系統",
+                    "專案管理",
                   ],
                   affiliation: {
                     "@type": "Organization",
-                    name: "臺中市立大里高中",
+                    name: "市立大安高工",
                   },
                   sameAs: [
-                    "https://github.com/itousouta15",
-                    "https://x.com/itou_souta15",
-                    "https://www.instagram.com/itou.souta15",
-                    "https://t.me/itousouta15",
-                    "https://blog.itousouta.me",
+                    SITE_URL,
+                    // 此處可放入你的真實社群連結，例如：
+                    // "https://github.com/your-username",
+                    // "https://x.com/your-username",
                   ],
                 },
               ],
@@ -212,7 +189,6 @@ export default function RootLayout({
             <Header />
             <main className="main" id="main" tabIndex={-1}>
               <PageTransition>{children}</PageTransition>
-              {/* 留言板：每一頁的內容底下都有，滾到頁底才載入 Waline */}
               <GuestbookSection />
             </main>
             <Footer />

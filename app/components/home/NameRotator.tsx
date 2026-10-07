@@ -1,4 +1,4 @@
-const NAMES = ["itouSouta", "伊藤蒼太", "郭家睿"];
+const NAMES = ["Yase", "原阿", "李中原"];
 
 /* 輪播的名字走 data-name + CSS ::before，不是真的文字節點。
    原本是 sr-only 一份正常字串 + aria-hidden 一份動畫用的，aria-hidden 擋得住

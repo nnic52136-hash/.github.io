@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMetadata, SITE_DESCRIPTION } from "./lib/seo";
-import { ROLES, TILE_COLS } from "./data";
-import TileIcon from "./components/TileIcon";
-import { TILE_ICON_META } from "./components/tileIconMeta";
+import { ROLES } from "./data";
 import GithubGlyph from "./components/GithubGlyph";
 import GithubContributionCard from "./components/home/GithubContributionCard";
+import TagCloudWidget from "./components/home/TagCloudWidget";
 import {
   LanyardProvider,
   ProfileStatus,
@@ -18,13 +17,8 @@ import BadgeShape from "./components/home/BadgeShape";
 import NameRotator from "./components/home/NameRotator";
 import DecorativeImage from "./components/DecorativeImage";
 
-/* 首頁之前沒有自己的 metadata，整頁靠繼承 layout 的 default title「itouSouta.me」
-   ——只有一個網域名、完全沒描述這頁是什麼，Google 判定它沒用，就自己拿 <h1> 的
-   文字改寫標題（SERP 上長出「itouSouta / 伊藤蒼太/ 郭家睿itouSouta伊藤蒼太-
-   郭家睿」那串）。標題直接把大家真的會搜的三個名字寫進去，absolute 是因為模板
-   會再黏一次站名，變成「…| itouSouta.me」太囉唆，站名 Google 本來就會另外顯示。 */
 export const metadata: Metadata = pageMetadata({
-  title: "itouSouta 的個人網站 ε(*´･∀･｀)зﾞ",
+  title: "一切的原點",
   description: SITE_DESCRIPTION,
   path: "/",
   absolute: true,
@@ -40,12 +34,6 @@ export default function HomePage() {
 }
 
 function HomeContent() {
-  const tileIcons = TILE_COLS.flat();
-  const tileRows = {
-    upper: tileIcons.filter((_, i) => i % 2 === 0),
-    lower: tileIcons.filter((_, i) => i % 2 === 1),
-  };
-
   return (
     <section className="home-grid">
       {/* Profile card */}
@@ -69,8 +57,8 @@ function HomeContent() {
                 <AvatarEasterEgg
                   className="avatar"
                   src="/assets/brand/avatar.webp"
-                  alt="郭家睿 / 伊藤蒼太"
-                  href="https://dc.itousouta.me"
+                  alt="李中原 / 亞瑟原 / Yase"
+                  href="https://github.com/nnic52136-hash"
                 />
                 <ProfileStatusDot />
               </div>
@@ -82,15 +70,15 @@ function HomeContent() {
               </div>
             </div>
             <div className="name-row">
-              <span className="name">郭家睿</span>
+              <span className="name">李中原</span>
               <span className="sr-only"> · </span>
-              <span className="alias">伊藤蒼太</span>
+              <span className="alias">亞瑟原</span>
             </div>
-            <div className="handle">itou.souta15 · 人間になりたい</div>
+            <div className="handle">來世所及，皆為體驗</div>
             <ProfileStatus />
             <div className="divider" />
             <div className="label">關於我</div>
-            <div className="field">好想睡覺 Zzzz</div>
+            <div className="field">自學生 · 地球online玩家</div>
             <div className="label mt16">身分組</div>
             <div className="roles">
               <div className="role-row">
@@ -111,7 +99,7 @@ function HomeContent() {
               </div>
             </div>
             <div className="label mt16">成為成員時間</div>
-            <div className="field">2009/01/15</div>
+            <div className="field">2010/06/26</div>
           </div>
         </div>
       </aside>
@@ -125,7 +113,7 @@ function HomeContent() {
             <h1 className="hero-title">
               I&apos;m <NameRotator />
             </h1>
-            <div className="hero-sub">一個喜歡 VOCALOID 和畫插畫的怪人</div>
+            <div className="hero-sub">喜歡體驗世界的人</div>
             <div className="hero-actions">
               <Link
                 className="btn-primary"
@@ -134,66 +122,33 @@ function HomeContent() {
               >
                 關於我 <span className="btn-arrow dark">→</span>
               </Link>
-              <a
-                className="btn-ghost"
-                href="https://blog.itousouta.me"
-                target="_blank"
-                rel="noopener nofollow noreferrer"
-                style={{ textDecoration: "none" }}
-              >
-                BLOG <span className="btn-arrow inset">→</span>
-              </a>
             </div>
           </div>
           <div className="hero-side">
             <HeroFace />
           </div>
         </div>
-
-        {/* Quote + tiles strip */}
-        <div className="card quote-card">
-          <div className="quote-main">
-            <div className="quote-text">
-              情熱を失っては、
-              <br />
-              何もできない。
-            </div>
+        
+        {/* 訪客留印牆 */}
+        <div
+          className="card quote-card tag-cloud-card"
+          style={{
+            minHeight: "unset",
+            height: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            gap: "8px",
+            padding: "20px 24px",
+            boxSizing: "border-box",
+          }}
+        >
+          <div>
+            <div className="card-kicker">IMPRESSIONS</div>
+            <div className="nav-card-title">訪客留印牆</div>
           </div>
-          <div className="tiles-strip">
-            {Object.entries(tileRows).map(([row, icons]) => (
-              <div className={`tiles-row tiles-row-${row}`} key={row}>
-                {[0, 1].map((g) => (
-                  <div
-                    className="tiles-row-group"
-                    key={g}
-                    aria-hidden={g === 1 ? true : undefined}
-                  >
-                    {icons.map((icon, i) => (
-                      <div key={`${row}-${i}`} className="tile">
-                        <TileIcon kind={icon} />
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="quote-tech-panel" aria-label="technology icons">
-            {tileIcons.map((icon) => (
-              <div className="quote-tech-item" key={icon}>
-                <span className="quote-tech-icon">
-                  {/* 尺寸走 prop：TileIcon 把寬高寫成 inline style，用 CSS 蓋
-                      得加 !important（手機版那條就是，見 globals.css） */}
-                  <TileIcon kind={icon} size={18} />
-                </span>
-                <span className="quote-tech-name">
-                  {TILE_ICON_META[icon]?.label ?? icon}
-                </span>
-              </div>
-            ))}
-          </div>
+          <TagCloudWidget />
         </div>
-
         {/* Bento: nav cards */}
         <div className="bento">
           <Link
@@ -203,7 +158,7 @@ function HomeContent() {
           >
             <div>
               <div className="card-kicker">WRITING</div>
-              <div className="nav-card-title">碎碎念</div>
+              <div className="nav-card-title">隨筆</div>
             </div>
             <span className="nav-card-ghost" aria-hidden>
               念
@@ -225,9 +180,11 @@ function HomeContent() {
             <div className="card-body">
               <div className="card-kicker">LIKES</div>
               <div className="card-title-lg">
-                喜歡
+                I saw,
                 <br />
-                的東西
+                I loved,
+                <br />
+                I lived.
               </div>
             </div>
             <span className="card-arrow-lg">↗</span>
@@ -240,7 +197,7 @@ function HomeContent() {
           >
             <div>
               <div className="card-kicker">LINKS</div>
-              <div className="nav-card-title">友鏈</div>
+              <div className="nav-card-title">知交</div>
             </div>
             <span className="nav-card-ghost" aria-hidden>
               友
@@ -255,7 +212,7 @@ function HomeContent() {
           >
             <div>
               <div className="card-kicker">JOURNEY</div>
-              <div className="nav-card-title">經歷</div>
+              <div className="nav-card-title">閱歷</div>
             </div>
             <span className="nav-card-ghost" aria-hidden>
               歷
@@ -271,7 +228,7 @@ function HomeContent() {
             <GithubGlyph className="card-projects-glyph" fill="var(--tx)" />
             <div className="card-body-sm">
               <div className="card-kicker">PROJECTS</div>
-              <div className="card-title-md">一些專案們</div>
+              <div className="card-title-md">一些成果</div>
             </div>
             <span className="card-arrow-sm">↗</span>
           </Link>

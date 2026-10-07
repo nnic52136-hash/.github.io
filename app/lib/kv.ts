@@ -1,4 +1,9 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
+
+export const kv = new Redis({
+  url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
 
 export interface KVThought {
   id: string;
@@ -149,4 +154,19 @@ export async function addGuestbookReply(
     : [];
   list.push(reply);
   await kv.hset(key, { [commentId]: JSON.stringify(list) });
+}
+/* ---- Slido 訪客文字雲 ---- */
+const TAGS_KEY = "tags:counts";
+
+// 取得所有標籤與出現次數 { "自學生": 12, "AI Agent": 8, "帥哥": 5 }
+export async function getTags(): Promise<Record<string, number>> {
+  const all = await kv.hgetall<Record<string, number>>(TAGS_KEY);
+  return all ?? {};
+}
+
+// 標籤計數 +1 (若標籤不存在會自動建立)
+export async function incrTag(tag: string): Promise<number> {
+  const cleanTag = tag.trim().slice(0, 20); // 限制單一標籤最多 20 字
+  if (!cleanTag) return 0;
+  return kv.hincrby(TAGS_KEY, cleanTag, 1);
 }

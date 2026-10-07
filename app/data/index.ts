@@ -3,8 +3,6 @@
    `from "../data"` / `from "./data"` 都不用改。 */
 export * from "./site";
 export * from "./likes";
-export * from "./music";
 export * from "./projects";
-export * from "./thoughts";
 export * from "./links";
 export * from "./experience";

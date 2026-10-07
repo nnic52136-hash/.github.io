@@ -1,346 +1,75 @@
+export type ExperienceCategory = 'project' | 'organization' | 'contest' | 'volunteer' | 'education';
+
 export interface ExperienceItem {
-  period: string;
+  // 基礎資訊
+  id: string;
   title: string;
+  organization?: string;     // 組織 / 單位 (例如: "QRACON 籌備團隊")
+  role?: string;             // 角色 / 職稱 (例如: "行銷組長")
+
+  // 時間設定
+  startDate?: string;        // "YYYY-MM"
+  endDate?: string;          // "YYYY-MM" 或 "Present"
+  period?: string;           // 顯示文字 (例如: "2026.05 - 2026.09")
+
+  // 分類與標籤
+  tags?: string[];           // 頂部快速篩選標籤 (例: ["活動籌備", "比賽"])
+  color: string;             // 色彩主題 ("purple" | "blue" | "green" 等)
+
+  // 內容敘述
+  summary?: string;          // 卡片摘要 (Hover 展開顯示)
+  longDesc?: string;         // Modal 彈窗內的完整心得
+
+  // 跳轉模式與資源
+  hasDetail?: boolean;       // true: 導向 /experience/[slug]，false: 開啟 Modal 彈窗
+  slug?: string;             // 長文 MDX 檔名 (content/experience/[slug].mdx)
+  href?: string;             // 外部連結
+  images?: string[];         // Modal 彈窗圖片
+
+  // 舊欄位相容 (可選)
   org?: string;
   desc?: string;
-  color?: "blue" | "purple";
-  category?: string;
-  /** 有填其中一個，「經歷」時間軸卡片就會多顯示「詳細資訊」按鈕開彈窗；
-   *  三個都沒填就不顯示按鈕。longDesc 是彈窗裡的完整內容。 */
-  longDesc?: string;
-  /** 彈窗裡的外部連結（官網、成果連結、心得文…）。 */
-  href?: string;
-  /** 彈窗裡的圖片區（現場照片、獎狀、成果截圖…），格狀排列，點圖開原圖。 */
-  images?: string[];
 }
 
-export const EXPERIENCE: ExperienceItem[] = [
+export const EXPERIENCES: ExperienceItem[] = [
   {
-    period: "2015-2021",
-    title: "臺中市立大明國民小學",
-    org: "學生",
-    desc: "",
-    color: "blue",
-    category: "學歷",
-  },
-  {
-    period: "2021-2024",
-    title: "臺中市立大雅國民中學",
-    org: "學生",
-    desc: "開始接觸Scratch，對程式設計開始感興趣",
-    color: "blue",
-    category: "學歷",
-  },
-  {
-    period: "2024-現在",
-    title: "臺中市立大里高級中學",
-    org: "資訊校隊隊長",
-    desc: "加入資訊校隊，開始製作各式專案，參與各式比賽與活動，領導資訊社群，持續精進自我並朝理想邁進。",
-    color: "blue",
-    category: "學歷",
-  },
-  {
-    period: "2025",
-    title: "114學年度 校內資訊學科能力競賽",
-    org: "第三名",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "115學年度 校內資訊學科能力競賽",
-    org: "第一名",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "臺北市城市通微服務大黑客松",
-    org: "入圍決賽",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "全國高中醫療科技競賽",
-    org: "參賽",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "全國人文社會永續行動創新應用競賽",
-    org: "參賽",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "Hackit DayDream",
-    org: "參與",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "Hackit ScropYard TW",
-    org: "參與",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "FuStar 未來之星-科學創意挑戰賽",
-    org: "參賽",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "AIS3 Pre-exam",
-    org: "rk.67",
+    id: "exp-2",
+    title: "QRACON 2026 行銷組",
+    organization: "QRACON 籌備團隊",
+    role: "組長",
+    period: "2026.05 - Now",
+    tags: ["活動籌備"],
     color: "purple",
-    category: "比賽",
+    summary: "負責 QRACON 2026 全盤行銷策略、社群文案與薛丁格的貓主題視覺企劃。",
+    hasDetail: true,
+    slug: "qracon-2026",
   },
   {
-    period: "2025",
-    title: "FhCTF",
-    org: "rk.1",
+    id: "exp-1",
+    title: "FRC Team 8585 公關長",
+    organization: "大安高工",
+    role: "公關長",
+    period: "2026.04 - Now",
+    tags: ["組織&社團"],
+    color: "blue",
+    summary: "贊助企劃書撰寫與企業對接。",
+    hasDetail: false,
+    longDesc: "負責 FRC Team 8585 的對外公關，撰寫贊助企劃書並向廠商進行 Pitch。",
+    href: "https://github.com",
+    images: ["/assets/projects/itousouta15.webp"],
+  },
+  {
+    id: "exp-3",
+    title: "大安電資",
+    organization: "大安高工",
+    role: "公關長",
+    period: "2026.07 - 2026.09",
+    tags: ["組織&社團"],
     color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "Hackit Campfire",
-    org: "參與",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "PDAO 程式設計與最佳化競賽",
-    org: "第 21 名",
-    color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "AIS3 Pre-exam",
-    org: "rk.140",
-    color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "TSCCTF",
-    org: "rk.25 / 115",
-    color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "diceCTF",
-    org: "rk.121 / 497",
-    color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "PicoCTF",
-    org: "rk.82 / 8295",
-    color: "purple",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "AIS3 EOF 初賽",
-    org: "參賽",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "HiPAC 初賽",
-    org: "rk.11",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2026",
-    title: "HiPAC 決賽",
-    org: "佳作、Nvidia 特別獎、未來之星獎",
-    color: "blue",
-    category: "比賽",
-  },
-  {
-    period: "2025",
-    title: "大里高中資訊校隊",
-    org: "隊長、教學",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2025",
-    title: "北台灣學生資訊社群",
-    org: "美宣",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2025-2026",
-    title: "第五屆 SCAICT 中部高中電資社團聯合會議",
-    org: "會長、資訊組組長",
-    color: "purple",
-    category: "社群",
-    longDesc:
-      "中文全名為中部高中電資社團聯合會議，簡稱「中電會」。成立於 2022 年 2 月，由文華高中電腦研究社第 29 屆社長周佑康與臺中一中數位創作社第 16 屆社長蔡承希，在 AIS3 新型態資安實務主題課程講師——台科大鄭欣明教授與陽交大黃俊穎教授——的啟發下共同創立。我們的目標是結合中部電資資源，打造一個跨校交流、合作學習的資訊教育平台，以積極辦理資訊教育活動、促進資源共享與永續傳承為宗旨",
-    href: "https://scaitc.org/",
-  },
-  {
-    period: "2025",
-    title: "AIS3 中區資安體驗營",
-    org: "參與",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "第二屆 大里高中機器人研究社資訊組",
-    org: "指導老師",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "大里高中 C# 與 Unity 遊戲設計營",
-    org: "總召",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "第三屆 THJCC 臺灣高中聯合資安競賽",
-    org: "網管、美宣",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "TWNOG 台灣網路維運論壇",
-    org: "設計組",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "SITCON 2026",
-    org: "閃電講講者",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "g0v Summit",
-    org: "場務組",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "SITCON Camp",
-    org: "庶務組",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "SCIST x SCAICT 聯合寒訓",
-    org: "副召、資訊組",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "SITCON",
-    org: "社群攤位",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "COSCUP",
-    org: "場務組機動股",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "北中南學生資訊社群聯合大黑客松",
-    org: "副召",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "SCAICT x 中興大學 聯合暑訓",
-    org: "總召、資訊組",
-    color: "purple",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "一日資訊體驗營",
-    org: "設計組、中部場助教",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "AIS3 2026",
-    org: "社團之夜 中電會社群講者",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2027",
-    title: "SITCON 2027",
-    org: "設計組組員",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2027",
-    title: "SITCON 2027",
-    org: "場務組副組長/餐飲股長",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2027",
-    title: "第四屆 THJCC 臺灣高中聯合資安競賽",
-    org: "設計組組長",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2027",
-    title: "FUTUREMODE 台灣未來祭",
-    org: "SITCON Hackathon STAFF",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "大里高中 APCS 初級營",
-    org: "講師",
-    color: "blue",
-    category: "社群",
-  },
-  {
-    period: "2026",
-    title: "AIS3 Club幹部訓練 中部場",
-    org: "社群講者",
-    color: "blue",
-    category: "社群",
+    summary: "負責公關。",
+    hasDetail: true,
+    slug: "dacsssc",
   },
 ];
+
+export const EXPERIENCE = EXPERIENCES;

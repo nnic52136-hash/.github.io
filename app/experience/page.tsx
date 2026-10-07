@@ -1,35 +1,25 @@
 import type { Metadata } from "next";
-import PageHead from "../components/PageHead";
-import ExperienceTimeline from "../components/experience/ExperienceTimeline";
-import { EXPERIENCE, ExperienceItem } from "../data";
-import { pageMetadata } from "../lib/seo";
-
-const description =
-  "itouSouta（伊藤蒼太 / 郭家睿）的學習與活動經歷：臺中市立大里高中資訊校隊、SCAICT 中部高中電資社團聯合會議、各種營隊與競賽的時間軸。";
+import PageHead from "@/app/components/PageHead";
+import ExperienceTimeline from "@/app/components/experience/ExperienceTimeline";
+import { EXPERIENCES } from "@/app/data";
+import { pageMetadata } from "@/app/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "經歷",
-  description,
+  title: "個人經歷與活動",
+  description: "活動籌備、比賽、營隊、講座展覽與上台表演紀錄",
   path: "/experience",
 });
 
-function groupByCategory(items: ExperienceItem[]) {
-  const groups = new Map<string, ExperienceItem[]>();
-  for (const e of items) {
-    const key = e.category ?? "";
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key)!.push(e);
-  }
-  return [...groups.entries()];
-}
-
 export default function ExperiencePage() {
-  const groups = groupByCategory(EXPERIENCE);
-
   return (
-    <section style={{ paddingBottom: 8 }}>
-      <PageHead kicker="JOURNEY" title="沒有路!!!" desc="持續追求自身所愛" />
-      <ExperienceTimeline groups={groups} />
+    <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 16px" }}>
+      <PageHead
+        kicker="EXPERIENCE & ACTIVITIES"
+        title="經歷與活動"
+        desc="活動籌備 · 競賽歷程 · 營隊志工 · 講座展覽 · 上台表演"
+      />
+      {/* 直接渲染時間軸，由內部進行標籤篩選與 Hover 展開 */}
+      <ExperienceTimeline items={EXPERIENCES} />
     </section>
   );
 }

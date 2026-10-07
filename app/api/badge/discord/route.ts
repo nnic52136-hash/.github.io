@@ -1,7 +1,7 @@
 import { DISCORD_USER_ID } from "../../../siteConfig";
 import { shieldBadge, svgResponse } from "../../../lib/badge";
 
-// Discord 狀態徽章：https://itousouta.me/api/badge/discord.svg
+// Discord 狀態徽章：https://nnic52136-hash.github.io/api/badge/discord.svg
 // 掛在 README 會顯示目前上線/閒置/勿擾/離線。狀態常變，快取壓短。
 
 export const revalidate = 60;

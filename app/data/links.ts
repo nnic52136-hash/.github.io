@@ -8,10 +8,17 @@ export interface LinkItem {
 
 export const LINKS: LinkItem[] = [
   {
-    name: "xxxxxxxx",
-    handle: "xxxxxxxxxxxxxxxxx",
-    href: "https://nnic52136-hash.github.io/Yase52136.github.io/",
+    name: "原阿",
+    handle: "來世所及，皆為體驗",
+    href: " https://github-io-sigma-ten.vercel.app/ ",
     desc: "一個測試",
-    avatar: "https://d-sketon.github.io/avatar/avatar.webp",
+    avatar: " https://github-io-sigma-ten.vercel.app/assets/brand/avatar.webp ",
+  },
+  {
+    name: "吳鑽",
+    handle: "不為了迎合別人委屈自己",
+    href: "  https://wuzuantw.com ",
+    desc: "30歲高中生",
+    avatar: " https://wuzuantw.com/images/favicon.png ",
   },
 ];

@@ -6,7 +6,7 @@ import { PROJECTS } from "../data";
 import { getAllReleases, getAllRepoInfo } from "../lib/github";
 import { pageMetadata } from "../lib/seo";
 
-const description = "itouSouta 做過的專案們 (◍•ᴗ•◍)ゝ";
+const description = "Yase 的成果們 (◍•ᴗ•◍)ゝ";
 
 export const metadata: Metadata = pageMetadata({
   title: "一些專案們",

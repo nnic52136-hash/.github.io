@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "原 的個人網站",
-    short_name: "亞瑟原",
+    short_name: "Yase Origin",
     description: "Yase Origin",
     start_url: "/",
     display: "standalone",

@@ -130,6 +130,24 @@ export default function Footer() {
             2026
             <span className="footer-heart">♥</span>
             <span>yuan52136</span>
+            <span style={{ opacity: 0.4, margin: "0 8px" }}>·</span>
+            <span style={{ opacity: 0.85, fontSize: "0.85em" }}>
+              特別致謝{" "}
+              <a
+                href="https://itousouta.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "inherit",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "3px",
+                  transition: "opacity 0.2s ease",
+                }}
+              >
+                itouSouta
+              </a>{" "}
+              的主題開源與設計靈感
+            </span>
           </div>
           <VisitorCounter />
         </div>

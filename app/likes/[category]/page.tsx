@@ -18,8 +18,8 @@ export function generateMetadata({
   const cat = LIKE_CATEGORIES.find((c) => c.key === params.category);
   const title = cat ? cat.label : "喜歡的東西";
   const description = cat
-    ? `itouSouta 收藏的${cat.label}清單，共 ${cat.items.length} 部，每一部都有我自己的評分和一點心得 (╯✧∇✧)╯`
-    : "itouSouta 喜歡的輕小說、漫畫、動漫、VTuber 與 VOCALOID 音樂收藏 (╯✧∇✧)╯";
+    ? `Yase 收藏的${cat.label}清單，共 ${cat.items.length} 部，每一部都有我自己的評分和一點心得 (╯✧∇✧)╯`
+    : "Yase 喜歡的東西清單，包含各種收藏、評分和心得 (╯✧∇✧)╯";
 
   return pageMetadata({
     title,

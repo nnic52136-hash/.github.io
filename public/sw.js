@@ -1,5 +1,5 @@
-/* itousouta.me service worker — 更新快取策略時記得 bump CACHE 版本 */
-const CACHE = "itousouta-v2";
+/* Yase Origin service worker — 更新快取策略時記得 bump CACHE 版本 */
+const CACHE = "yuan-v1";
 const PRECACHE = ["/", "/offline"];
 
 self.addEventListener("install", (event) => {

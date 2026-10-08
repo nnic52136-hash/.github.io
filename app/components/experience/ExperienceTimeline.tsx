@@ -11,16 +11,6 @@ interface Props {
   items?: ExperienceItem[];
 }
 
-const FILTER_TAGS = [
-  "全部",
-  "活動籌備",
-  "組織&社團",
-  "比賽",
-  "營隊活動",
-  "講座展覽",
-  "上台&表演",
-];
-
 export default function ExperienceTimeline({ groups, items }: Props) {
   const router = useRouter();
   const timelineEls = useRef<Set<HTMLDivElement>>(new Set());
@@ -41,7 +31,16 @@ export default function ExperienceTimeline({ groups, items }: Props) {
     return [];
   }, [groups, items]);
 
-  // 2. 標籤快速篩選（刪除 category 比對，純靠 tags）
+  // 2. 🔥 動態從所有經歷的 tags 中萃取出不重複的標籤清單，並自動加上「全部」
+  const dynamicFilterTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    rawItems.forEach((item) => {
+      item.tags?.forEach((t) => tagSet.add(t));
+    });
+    return ["全部", ...Array.from(tagSet)];
+  }, [rawItems]);
+
+  // 3. 標籤快速篩選
   const filteredItems = useMemo(() => {
     if (selectedTag === "全部") return rawItems;
     return rawItems.filter((item) => item.tags?.includes(selectedTag));
@@ -112,7 +111,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
 
   return (
     <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto" }}>
-      {/* 頂部標籤列 */}
+      {/* 頂部動態生成標籤列（改為自動讀取資料中的 tags） */}
       <div
         style={{
           display: "flex",
@@ -121,7 +120,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
           marginBottom: "32px",
         }}
       >
-        {FILTER_TAGS.map((tag) => {
+        {dynamicFilterTags.map((tag) => {
           const isActive = selectedTag === tag;
           return (
             <button
@@ -147,7 +146,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
         })}
       </div>
 
-      {/* 時間軸清單（直接單層渲染平鋪，不再進行類別分組） */}
+      {/* 時間軸清單 */}
       {filteredItems.length === 0 ? (
         <div style={{ padding: "60px 0", color: "var(--dim)", textAlign: "center" }}>
           尚無此標籤的經歷項目 (´･ω･`)
@@ -202,7 +201,6 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                       transform: isHovered ? "translateY(-2px)" : "none",
                     }}
                   >
-                    {/* 預設僅顯示：標題與時間 */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "12px" }}>
                       <div className="tl-title" style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--tx)", margin: 0 }}>
                         {e.title}

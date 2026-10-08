@@ -4,10 +4,10 @@ import { LINKS } from "../data";
 import { avatarThumb } from "../lib/imageThumb";
 import { pageMetadata } from "../lib/seo";
 
-const description = "itouSouta 的偷摸他基 ∠( ᐛ 」∠)_";
+const description = "Yase 的知交們 ∠( ᐛ 」∠)_";
 
 export const metadata: Metadata = pageMetadata({
-  title: "友鏈",
+  title: "知交",
   description,
   path: "/links",
 });
@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function LinksPage() {
   return (
     <section style={{ paddingBottom: 8 }}>
-      <PageHead kicker="LINKS" title="偷摸他基" />
+      <PageHead kicker="LINKS" title="Friends" />
       <div className="links-grid">
         {LINKS.map((l, i) => (
           <a

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ExperienceDetailPage({ params }: Props) {
-  // 從 MDX 解析工具讀取檔案 (修復原 getExperiencePost 函式名錯位問題)
+  // 從 MDX 解析工具讀取檔案
   const item = await getMdxBySlug("experience", params.slug);
   if (!item) notFound();
 
@@ -47,20 +47,30 @@ export default async function ExperienceDetailPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* 文章標頭（保持原站點 CSS 類別名稱） */}
+      {/* 文章標頭（動態渲染分類與多個標籤） */}
       <header style={{ marginBottom: "2rem" }}>
-        <div className="thought-meta" style={{ marginBottom: "0.5rem", display: "flex", gap: "0.5rem" }}>
+        <div className="thought-meta" style={{ marginBottom: "0.5rem", display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center" }}>
+          {/* 預設分類或標籤 */}
           <span className="thought-tag">{frontmatter.category || "經歷"}</span>
-          <span className="thought-date">
+          
+          {/* 動態渲染前端帶入的 tags 陣列：新增什麼標籤，這裡就會跟著新增什麼！ */}
+          {frontmatter.tags && frontmatter.tags.map((tag: string, index: number) => (
+            <span key={index} className="thought-tag" style={{ backgroundColor: "rgba(128, 128, 128, 0.15)" }}>
+              {tag}
+            </span>
+          ))}
+
+          <span className="thought-date" style={{ marginLeft: "auto" }}>
             {frontmatter.startDate} {frontmatter.endDate ? `~ ${frontmatter.endDate}` : ""}
           </span>
         </div>
+
         <h1 style={{ fontSize: "2rem", fontWeight: "bold", margin: "0.5rem 0" }}>
           {frontmatter.title}
         </h1>
         {frontmatter.organization && (
           <p style={{ opacity: 0.8, fontSize: "1.1rem" }}>
-            {frontmatter.organization} · {frontmatter.role}
+            {frontmatter.organization} {frontmatter.role ? `· ${frontmatter.role}` : ""}
           </p>
         )}
       </header>

@@ -397,8 +397,10 @@ export function ProfileStatus() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="dc-act-art" src="/assets/brand/cat.webp" alt="" />
           <div className="dc-act-meta">
-            <div className="dc-act-title">這個人不知道跑哪去了。</div>
-            <div className="dc-act-sub">大概是在睡覺吧Zzzz</div>
+            <div className="dc-act-title">
+              <div>活著不問意義，</div>
+              <div>只問是否真正活過。</div>
+            </div>
           </div>
         </div>
       )}

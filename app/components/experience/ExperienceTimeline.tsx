@@ -321,7 +321,13 @@ export default function ExperienceTimeline({ groups, items }: Props) {
           kicker={activeItem.tags?.[0] ?? "經歷"}
           kickerColor={activeItem.color ?? "blue"}
           title={activeItem.title}
-          desc={activeItem.organization || activeItem.org || activeItem.period}
+          // 👈 組合你要的格式：summary · organization（若其中一個沒有則自動過濾、用 " · " 串接）
+          desc={[
+            activeItem.summary,
+            activeItem.organization || activeItem.org,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
           onClose={() => setActiveItem(null)}
         >
           <ExperienceDetailBody item={activeItem} />

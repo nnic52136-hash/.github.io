@@ -8,12 +8,12 @@ export default function ExperienceDetailBody({
 }) {
   return (
     <>
+      {/* 灰色標籤列：只放 period 與 tags，不重複放 summary/org */}
       <div
         className="proj-tags"
         style={{ marginTop: 4, display: "flex", gap: "6px", flexWrap: "wrap" }}
       >
         <span className="proj-tag">{item.period}</span>
-        {item.org && <span className="proj-tag">{item.org}</span>}
         {item.tags?.map((tag) => (
           <span className="proj-tag" key={tag} style={{ color: "var(--blue)" }}>
             #{tag}

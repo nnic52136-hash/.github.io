@@ -5637,32 +5637,43 @@ html, body {
   }
 }
 
-/* ---------------------------------------------------------------------------
-   4. 通用手機版介面優化（檢查並修正程式碼、圖片與容器卡邊）
-   --------------------------------------------------------------------------- */
+/* ===========================================================================
+   Writing 頁面專用 RWD：僅在手機版 (<= 768px) 強制覆蓋行內樣式轉為單欄
+   =========================================================================== */
 @media (max-width: 768px) {
-  /* 確保容器左右邊距適中，不貼死螢幕邊緣 */
-  .post-container,
-  .main,
-  .page-container {
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-    box-sizing: border-box;
+  /* 手機版：強制將行內 Grid 轉為 Flex 直排 */
+  .writing-layout-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    width: 100% !important;
   }
 
-  /* MDX 內文中的程式碼塊與表格允許內部滾動，不撐大整體網頁 */
-  .post-content pre,
-  .markdown-body pre,
-  .markdown-body table {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
+  /* 側邊欄改為靜態定位，取消電腦版的 sticky 貼頂 */
+  .writing-left-sidebar {
+    position: static !important;
+    width: 100% !important;
   }
 
-  /* 內文圖片自動縮放 */
-  .post-content img,
-  .markdown-body img {
-    max-width: 100% !important;
-    height: auto !important;
+  /* 主內容區佔滿寬度 */
+  .writing-main-content {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+/* 讓資訊欄內部的 4 個卡片保持優雅分開的間距 */
+.writing-left-sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important; /* 👈 可依喜好調整為 16px ~ 24px */
+}
+
+/* 手機版同步確保間距不變 */
+@media (max-width: 768px) {
+  .writing-left-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+    margin-bottom: 24px !important; /* 與下方文章區域保持距離 */
   }
 }

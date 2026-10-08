@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import WritingReaction from "./WritingReaction";
+import Image from "next/image";
+import WritingReaction from "./WritingReaction"; // ✅ 重新引入按讚元件
 
 export interface PostItem {
   slug: string;
@@ -48,19 +49,21 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [posts]);
 
-  // 3. 統計「月份彙整」（例如：2026年 06月）
+  // 3. 統計「月份彙整」（相容相容 YYYY-MM-DD 與 YYYY/MM/DD）
   const monthlyArchives = useMemo(() => {
-    const map: Record<string, { label: string; key: string; count: number }> =
-      {};
+    const map: Record<string, { label: string; key: string; count: number }> = {};
     posts.forEach((post) => {
-      if (post.date && post.date.length >= 7) {
-        const yearMonthKey = post.date.substring(0, 7); // e.g. "2026-06"
-        const [y, m] = yearMonthKey.split("-");
-        const label = `${y} 年 ${m} 月`;
-        if (!map[yearMonthKey]) {
-          map[yearMonthKey] = { label, key: yearMonthKey, count: 0 };
+      if (post.date) {
+        const normalizedDate = post.date.replace(/\//g, "-");
+        if (normalizedDate.length >= 7) {
+          const yearMonthKey = normalizedDate.substring(0, 7);
+          const [y, m] = yearMonthKey.split("-");
+          const label = `${y} 年 ${m} 月`;
+          if (!map[yearMonthKey]) {
+            map[yearMonthKey] = { label, key: yearMonthKey, count: 0 };
+          }
+          map[yearMonthKey].count += 1;
         }
-        map[yearMonthKey].count += 1;
       }
     });
     return Object.values(map).sort((a, b) => b.key.localeCompare(a.key));
@@ -68,19 +71,16 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
 
   // 4. 多重條件過濾文章清單
   const filteredPosts = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
     return posts.filter((post) => {
-      const matchCategory = selectedCategory
-        ? post.category === selectedCategory
-        : true;
+      const matchCategory = selectedCategory ? post.category === selectedCategory : true;
       const matchTag = selectedTag ? post.tags?.includes(selectedTag) : true;
       const matchMonth = selectedMonth
-        ? post.date?.startsWith(selectedMonth)
+        ? post.date?.replace(/\//g, "-").startsWith(selectedMonth)
         : true;
-      const matchSearch = searchQuery
-        ? post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (post.summary || post.excerpt || "")
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
+      const matchSearch = query
+        ? post.title.toLowerCase().includes(query) ||
+          (post.summary || post.excerpt || "").toLowerCase().includes(query)
         : true;
 
       return matchCategory && matchTag && matchMonth && matchSearch;
@@ -112,7 +112,6 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
     return map;
   }, [filteredPosts]);
 
-  // 清除所有過濾條件
   const clearFilters = () => {
     setSelectedCategory(null);
     setSelectedTag(null);
@@ -120,8 +119,9 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
     setSearchQuery("");
   };
 
-  const hasActiveFilter =
-    selectedCategory || selectedTag || selectedMonth || searchQuery;
+  const hasActiveFilter = Boolean(
+    selectedCategory || selectedTag || selectedMonth || searchQuery
+  );
 
   return (
     <div
@@ -132,29 +132,19 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
         padding: "0 16px",
       }}
     >
-      {/* 響應式雙欄佈局：左側側邊欄、右側主要內容區 */}
+      {/* 電腦版預設行內樣式：280px 左欄 + 右欄剩餘空間 */}
       <div
+        className="writing-layout-container"
         style={{
           display: "grid",
           gridTemplateColumns: "280px 1fr",
           gap: "36px",
           alignItems: "start",
+          width: "100%",
         }}
-        className="writing-layout-container"
-      >
-        {/* =================================================================
-           左側邊欄 (Sidebar)：分類、標籤雲、彙整
-           ================================================================= */}
-        <aside
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            position: "sticky",
-            top: "24px",
-          }}
-          className="writing-left-sidebar"
-        >
+>
+        {/* ================= 側邊欄 (Sidebar) ================= */}
+        <aside className="writing-left-sidebar">
           {/* 搜尋框與清除篩選 */}
           <div
             style={{
@@ -166,6 +156,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
           >
             <input
               type="text"
+              aria-label="搜尋文章關鍵字"
               placeholder="搜尋文章關鍵字..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -201,7 +192,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             )}
           </div>
 
-          {/* 1. 分類 (Categories) */}
+          {/* 1. 分類 */}
           <div
             style={{
               padding: "18px",
@@ -224,9 +215,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             >
               分類
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               {categoryCounts.length === 0 ? (
                 <div style={{ fontSize: "0.82rem", color: "var(--dim)" }}>
                   尚無分類
@@ -237,6 +226,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                   return (
                     <button
                       key={cat}
+                      aria-pressed={active}
                       onClick={() => setSelectedCategory(active ? null : cat)}
                       style={{
                         display: "flex",
@@ -273,7 +263,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             </div>
           </div>
 
-          {/* 2. 標籤雲 (Tag Cloud) */}
+          {/* 2. 標籤雲 */}
           <div
             style={{
               padding: "18px",
@@ -302,6 +292,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                 return (
                   <button
                     key={`cloud-${tag}`}
+                    aria-pressed={active}
                     onClick={() => setSelectedTag(active ? null : tag)}
                     style={{
                       padding: "3px 8px",
@@ -325,7 +316,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             </div>
           </div>
 
-          {/* 3. 彙整 (Monthly Archives) */}
+          {/* 3. 彙整 */}
           <div
             style={{
               padding: "18px",
@@ -366,17 +357,14 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                 完整歸檔 →
               </Link>
             </div>
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-            >
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
               {monthlyArchives.map((archive) => {
                 const active = selectedMonth === archive.key;
                 return (
                   <button
                     key={archive.key}
-                    onClick={() =>
-                      setSelectedMonth(active ? null : archive.key)
-                    }
+                    aria-pressed={active}
+                    onClick={() => setSelectedMonth(active ? null : archive.key)}
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -402,11 +390,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
           </div>
         </aside>
 
-        {/* =================================================================
-           右側主內容區 (Main Column)：原版封面卡片 + 模式切換器
-           ================================================================= */}
+        {/* ================= 主內容區 (Main Column) ================= */}
         <main className="writing-main-content">
-          {/* 頂部標頭與模式切換按鈕 */}
           <div
             style={{
               display: "flex",
@@ -428,7 +413,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                 : "SERIES FOLDERS"}
             </div>
 
-            {/* 視圖切換按鈕 (時間線 / 系列資料夾) */}
+            {/* 視圖切換按鈕 */}
             <div
               style={{
                 display: "inline-flex",
@@ -441,6 +426,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             >
               <button
                 onClick={() => setViewMode("timeline")}
+                aria-pressed={viewMode === "timeline"}
                 style={{
                   padding: "6px 14px",
                   borderRadius: "6px",
@@ -458,6 +444,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
               </button>
               <button
                 onClick={() => setViewMode("folder")}
+                aria-pressed={viewMode === "folder"}
                 style={{
                   padding: "6px 14px",
                   borderRadius: "6px",
@@ -485,7 +472,6 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             }}
           />
 
-          {/* 無文章提示 */}
           {filteredPosts.length === 0 ? (
             <div style={{ textAlign: "center", padding: "60px 0" }}>
               <div style={{ fontSize: "1.1rem", color: "var(--tx)" }}>
@@ -502,7 +488,7 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
               </div>
             </div>
           ) : viewMode === "timeline" ? (
-            /* ================= 原版時間線模式 (保留暗化封面與漸層) ================= */
+            /* 時間線模式 */
             <div
               style={{
                 position: "relative",
@@ -517,7 +503,6 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                 const summaryText = post.summary || post.excerpt;
                 return (
                   <div key={post.slug} style={{ position: "relative" }}>
-                    {/* 原版時間線節點圓點 */}
                     <div
                       style={{
                         position: "absolute",
@@ -532,40 +517,38 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                       }}
                     />
 
-                    {/* 原版長篇封面卡片 */}
-                    <Link
-                      href={`/writing/${post.slug}`}
+                    <div
                       className="thought-item"
                       style={{
-                        display: "block",
-                        color: "inherit",
                         position: "relative",
                         overflow: "hidden",
                         borderRadius: "14px",
                         padding: "24px",
                         border: "1px solid var(--bd)",
                         background: "var(--panel)",
-                        textDecoration: "none",
                         transition:
                           "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
                       }}
                     >
-                      {/* 低亮度背景封面圖 */}
+                      {/* 背景封面圖 */}
                       {post.cover && (
                         <div
                           style={{
                             position: "absolute",
                             inset: 0,
-                            backgroundImage: `url(${post.cover})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
                             opacity: 0.3,
                             filter: "brightness(0.35) contrast(1.1)",
                             zIndex: 0,
-                            transition:
-                              "transform 0.3s ease, opacity 0.3s ease",
                           }}
-                        />
+                        >
+                          <Image
+                            src={post.cover}
+                            alt={post.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 800px"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
                       )}
 
                       {/* 動態漸層遮罩 */}
@@ -579,104 +562,126 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                         }}
                       />
 
-                      {/* 卡片主體內容 */}
+                      {/* 卡片內容區 */}
                       <div style={{ position: "relative", zIndex: 2 }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "10px",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            marginBottom: "10px",
-                            fontSize: "0.8rem",
-                            color: "var(--dim)",
-                          }}
+                        <Link
+                          href={`/writing/${post.slug}`}
+                          style={{ color: "inherit", textDecoration: "none" }}
                         >
-                          <span style={{ color: "var(--tx)", fontWeight: 500 }}>
-                            {post.date}
-                          </span>
-                          {post.category && (
-                            <span
-                              style={{
-                                padding: "2px 8px",
-                                borderRadius: "4px",
-                                background: "var(--inset)",
-                                color: "var(--tx)",
-                                fontSize: "0.75rem",
-                              }}
-                            >
-                              {post.category}
-                            </span>
-                          )}
-                          {post.wordCount && <span>• {post.wordCount} 字</span>}
-                          {post.readingTime && (
-                            <span>• 閱讀 {post.readingTime} 分鐘</span>
-                          )}
-                        </div>
-
-                        <h2
-                          style={{
-                            fontSize: "1.3rem",
-                            fontWeight: 600,
-                            margin: "0 0 8px 0",
-                            color: "var(--tx)",
-                            lineHeight: 1.4,
-                          }}
-                        >
-                          {post.title}
-                        </h2>
-
-                        {summaryText && (
-                          <p
-                            style={{
-                              opacity: 0.85,
-                              fontSize: "0.92rem",
-                              lineHeight: 1.6,
-                              marginBottom: "14px",
-                              color: "var(--dim)",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
-                            }}
-                          >
-                            {summaryText}
-                          </p>
-                        )}
-
-                        {post.tags && post.tags.length > 0 && (
                           <div
                             style={{
                               display: "flex",
-                              gap: "6px",
+                              gap: "10px",
                               flexWrap: "wrap",
+                              alignItems: "center",
+                              marginBottom: "10px",
+                              fontSize: "0.8rem",
+                              color: "var(--dim)",
                             }}
                           >
-                            {post.tags.map((tag) => (
+                            <span style={{ color: "var(--tx)", fontWeight: 500 }}>
+                              {post.date}
+                            </span>
+                            {post.category && (
                               <span
-                                key={tag}
                                 style={{
-                                  fontSize: "0.75rem",
                                   padding: "2px 8px",
                                   borderRadius: "4px",
                                   background: "var(--inset)",
-                                  color: "var(--dim)",
-                                  border: "1px solid var(--bd)",
+                                  color: "var(--tx)",
+                                  fontSize: "0.75rem",
                                 }}
                               >
-                                #{tag}
+                                {post.category}
                               </span>
-                            ))}
+                            )}
+                            {post.wordCount && <span>• {post.wordCount} 字</span>}
+                            {post.readingTime && (
+                              <span>• 閱讀 {post.readingTime} 分鐘</span>
+                            )}
                           </div>
-                        )}
+
+                          <h2
+                            style={{
+                              fontSize: "1.3rem",
+                              fontWeight: 600,
+                              margin: "0 0 8px 0",
+                              color: "var(--tx)",
+                              lineHeight: 1.4,
+                            }}
+                          >
+                            {post.title}
+                          </h2>
+
+                          {summaryText && (
+                            <p
+                              style={{
+                                opacity: 0.85,
+                                fontSize: "0.92rem",
+                                lineHeight: 1.6,
+                                marginBottom: "14px",
+                                color: "var(--dim)",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                overflow: "hidden",
+                              }}
+                            >
+                              {summaryText}
+                            </p>
+                          )}
+                        </Link>
+
+                        {/* 標籤 + 按讚互動區 */}
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: "10px",
+                            marginTop: "12px",
+                          }}
+                        >
+                          {post.tags && post.tags.length > 0 ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "6px",
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {post.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  style={{
+                                    fontSize: "0.75rem",
+                                    padding: "2px 8px",
+                                    borderRadius: "4px",
+                                    background: "var(--inset)",
+                                    color: "var(--dim)",
+                                    border: "1px solid var(--bd)",
+                                  }}
+                                >
+                                  #{tag}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <div />
+                          )}
+
+                          {/* ✅ 重新擺回 WritingReaction 按讚組件 */}
+                          <WritingReaction id={post.slug} />
+                        </div>
                       </div>
-                    </Link>
+                    </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            /* ================= 原版系列資料夾模式 ================= */
+            /* 系列資料夾模式 */
             <div
               style={{
                 display: "grid",

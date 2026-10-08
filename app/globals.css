@@ -5549,3 +5549,120 @@ a.guestbook-nick:hover {
 .markdown-body td {
   color: var(--tx);
 }
+/* ===========================================================================
+   Mobile Responsive Adjustments (手機版響應式修正補丁)
+   =========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   1. 防止全站手機版出現水平拉動 / 跑版外擴捲軸
+   --------------------------------------------------------------------------- */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+}
+
+/* ---------------------------------------------------------------------------
+   2. 文章頁面 (/writing) 手機版：資訊欄自動移至上方，防止橫向推擠
+   --------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* 將原本並排的雙欄或側邊欄轉為垂直單欄 */
+  .writing-layout,
+  .writing-container,
+  .posts-with-sidebar,
+  .writing-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  /* 側邊資訊欄置頂並放寬至 100% */
+  .writing-sidebar,
+  .writing-info-col,
+  .writing-aside {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* 主文章卡片清單區域佔滿寬度 */
+  .writing-content,
+  .writing-main,
+  .post-list {
+    width: 100% !important;
+  }
+
+  /* 確保文章卡片內文不會爆框 */
+  .post-card, .thought-card {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   3. 經歷頁面 (/experience) 手機版：日期與標題換行拆分，釋放卡片空間
+   --------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  /* 卡片頂部區域：由橫排改為直排，解決標題被日期擠壓的問題 */
+  .tl-card > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+
+  /* 日期文字區塊：允許自動斷行，呈現上下一行 (例：2026.01 \n ~ 2026.02) */
+  .tl-period {
+    font-size: 0.8rem !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* 標題欄位佔滿最大寬度 */
+  .tl-title {
+    width: 100% !important;
+    font-size: 1.05rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* 調整時間軸邊距，避免小螢幕卡片擠壓點點 */
+  .exp-row {
+    margin-bottom: 12px !important;
+  }
+  
+  .tl-card {
+    padding: 12px 14px !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   4. 通用手機版介面優化（檢查並修正程式碼、圖片與容器卡邊）
+   --------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* 確保容器左右邊距適中，不貼死螢幕邊緣 */
+  .post-container,
+  .main,
+  .page-container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    box-sizing: border-box;
+  }
+
+  /* MDX 內文中的程式碼塊與表格允許內部滾動，不撐大整體網頁 */
+  .post-content pre,
+  .markdown-body pre,
+  .markdown-body table {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 內文圖片自動縮放 */
+  .post-content img,
+  .markdown-body img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}

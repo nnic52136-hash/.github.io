@@ -1,31 +1,30 @@
-export type ExperienceCategory =
-  "project" | "organization" | "contest" | "volunteer" | "education";
+export type ExperienceCategory = 'project' | 'organization' | 'contest' | 'volunteer' | 'education';
 
 export interface ExperienceItem {
   // 基礎資訊
   id: string;
   title: string;
-  organization?: string; // 組織 / 單位 (例如: "QRACON 籌備團隊")
-  role?: string; // 角色 / 職稱 (例如: "行銷組長")
+  organization?: string;     // 組織 / 單位 (例如: "QRACON 籌備團隊")
+  role?: string;             // 角色 / 職稱 (例如: "行銷組長")
 
   // 時間設定
-  startDate?: string; // "YYYY-MM"
-  endDate?: string; // "YYYY-MM" 或 "Present"
-  period?: string; // 顯示文字 (例如: "2026.05 - 2026.09")
+  startDate?: string;        // "YYYY-MM"
+  endDate?: string;          // "YYYY-MM" 或 "Present"
+  period?: string;           // 顯示文字 (例如: "2026.05 - 2026.09")
 
   // 分類與標籤
-  tags?: string[]; // 頂部快速篩選標籤 (例: ["活動籌備", "比賽"])
-  color: string; // 色彩主題 ("purple" | "blue" | "green" 等)
+  tags?: string[];           // 頂部快速篩選標籤 (例: ["活動籌備", "比賽"])
+  color: string;             // 色彩主題 ("purple" | "blue" | "green" 等)
 
   // 內容敘述
-  summary?: string; // 卡片摘要 (Hover 展開顯示)
-  longDesc?: string; // Modal 彈窗內的完整心得
+  summary?: string;          // 卡片摘要 (Hover 展開顯示)
+  longDesc?: string;         // Modal 彈窗內的完整心得
 
   // 跳轉模式與資源
-  hasDetail?: boolean; // true: 導向 /experience/[slug]，false: 開啟 Modal 彈窗
-  slug?: string; // 長文 MDX 檔名 (content/experience/[slug].mdx)
-  href?: string; // 外部連結
-  images?: string[]; // Modal 彈窗圖片
+  hasDetail?: boolean;       // true: 導向 /experience/[slug]，false: 開啟 Modal 彈窗
+  slug?: string;             // 長文 MDX 檔名 (content/experience/[slug].mdx)
+  href?: string;             // 外部連結
+  images?: string[];         // Modal 彈窗圖片
 
   // 舊欄位相容 (可選)
   org?: string;
@@ -76,20 +75,6 @@ export const EXPERIENCES: ExperienceItem[] = [
     images: ["/assets/experience/格致.jpg"],
   },
   {
-    id: "學歷-4",
-    title: "臺北市立大安高級工業職業學校",
-    organization: "高中",
-    role: "十年級",
-    period: "2025.08 - 2026.07",
-    tags: ["學歷"],
-    color: "purple",
-    summary: "真正開智跟探索的地方，學習的起點",
-    hasDetail: false,
-    longDesc: "補充中....",
-    href: "https://www.taivs.tp.edu.tw/",
-    images: ["/assets/experience/大安.jpg"],
-  },
-  {
     id: "學歷-5",
     title: "大安高工休學生/教育局自學生",
     organization: "高中",
@@ -101,17 +86,15 @@ export const EXPERIENCES: ExperienceItem[] = [
     hasDetail: false,
   },
   {
-    id: "exp-2",
-    title: "QRACON 2026 行銷組",
-    organization: "QRACON 籌備團隊",
-    role: "組長",
-    period: "2026.05 - Now",
-    tags: ["活動籌備"],
-    color: "purple",
-    summary:
-      "負責 QRACON 2026 全盤行銷策略、社群文案與薛丁格的貓主題視覺企劃。",
-    hasDetail: true,
-    slug: "qracon-2026",
+    id: "exp-0.5",
+    title: "進入 Hackit ",
+    organization: "組織&社群",
+    role: "活動籌備",
+    period: "2026.12.14",
+    tags: ["組織&社群", "資訊圈",],
+    color: "blue",
+    summary: "",
+    hasDetail: false,
   },
   {
     id: "exp-1",
@@ -123,10 +106,81 @@ export const EXPERIENCES: ExperienceItem[] = [
     color: "blue",
     summary: "學會為自己而活的地方，找一天認真寫篇文吧",
     hasDetail: false,
-    longDesc:
-      "主要負責 社群公關、宣傳曝光、贊助對接、任務安排、跨組溝通、工具人",
+    longDesc: "主要負責 社群公關、宣傳曝光、贊助對接、任務安排、跨組溝通、工具人",
     href: "https://www.instagram.com/p/DTt_e4JkU6I/",
     images: ["/assets/experience/Campfire.png"],
+  },
+  {
+    id: "exp-2",
+    title: "康普思/現 領智創匯顧問",
+    organization: "實習",
+    role: "實習",
+    period: "2026.02.15 - 2026.03.05",
+    tags: ["實習"],
+    color: "purple",
+    summary: "沒什麼好印象，不過還是學到了一些東西",
+    hasDetail: false,
+    href: "https://campulse.tw/",
+  },
+  {
+    id: "exp-3",
+    title: "大安高工機器人研究社 ",
+    organization: "Frc 858",
+    role: "公關長",
+    period: "2026.06 - 2026.08.04",
+    tags: ["Frc 8585", "社團"],
+    color: "blue",
+    summary: "",
+    hasDetail: true,
+    slug: "frc-8585",
+  },
+  {
+    id: "exp-4",
+    title: "大安高工校慶擺攤 ",
+    organization: "Frc 8585",
+    role: "行政&行銷",
+    period: "2026.04.16",
+    tags: ["Frc 8585", ""],
+    color: "blue",
+    summary: "此趟沒什麼收穫，但認識了蕭學長",
+    hasDetail: false,
+    longDesc: "擺攤約5小時，有1.5小時全員不見，錢還能賺得跟去年差不多蠻屌的",
+    images: ["/assets/experience/校慶擺攤.png"],
+  },
+  {
+    id: "exp-5",
+    title: "進入 人社青年",
+    organization: "人社青年",
+    role: "活動組實習",
+    period: "2026.02.18",
+    tags: [ "人社青年","組織&社群","人社類" ],
+    color: "blue",
+    summary: "第一個人社圈組織",
+    hasDetail: false,
+  },
+  {
+    id: "exp-6",
+    title: "Podcast 人社思辨",
+    organization: "人社青年",
+    role: "主持人",
+    period: "2026.04.14",
+    tags: ["Podcast", "人社青年","人社類" ],
+    color: "blue",
+    summary: "人生第一場Podcast，很緊張，但也看到自己哪裡可以更好",
+    hasDetail: false,
+    longDesc: "主要負責 主持、節奏把控、企劃、訪談",
+  },
+  {
+    id: "exp-33",
+    title: "QRACON 2026 行銷組",
+    organization: "QRACON 籌備團隊",
+    role: "組長",
+    period: "2026.05 - Now",
+    tags: ["活動籌備"],
+    color: "purple",
+    summary: "負責 QRACON 2026 全盤行銷策略、社群文案與薛丁格的貓主題視覺企劃。",
+    hasDetail: true,
+    slug: "qracon-2026",
   },
   {
     id: "exp-3",

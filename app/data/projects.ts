@@ -18,19 +18,19 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: "yetanotherbusapp",
-    kicker: "APP",
+    slug: "Yase Origin",
+    kicker: "網頁",
     color: "blue",
-    title: "YetAnotherBusApp",
-    desc: "現代化跨平台公車動態查詢 App",
-    why: "等公車最討厭的就是不知道車到底來了沒....我們想要做的是一個開源、高自訂性、介面乾淨、跨平台的查詢工具",
+    title: "Yase Origin",
+    desc: "紀錄生活跟隨筆的個人網站",
+    why: "因為想要看見自己，想要有一個自己的天地",
     longDesc:
-      "用 Flutter 打造的公車動態查詢 App，支援 Android / iOS 跨平台，提供路線、站牌與到站動態查詢，介面以現代化為目標重新設計",
-    tags: ["Flutter", "Dart"],
+      "特別致謝 itouSouta 的主題開源與設計靈感",
+    tags: ["nextjs", "css", "typescript"],
     releaseTimeline: true,
-    icon: "flutter",
-    href: "https://github.com/AvianJay/yetanotherbusapp",
-    cover: "/assets/projects/YABus.webp",
-    siteUrl: "https://busapp.avianjay.sbs/",
+    icon: "nextjs",
+    href: "https://github.com/nnic52136-hash/.github.io",
+    cover: "/assets/projects/Yase Origin.webp",
+    siteUrl: "https://github-io-sigma-ten.vercel.app/p",
   },
 ];

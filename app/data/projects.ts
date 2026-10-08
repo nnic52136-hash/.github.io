@@ -33,5 +33,4 @@ export const PROJECTS: Project[] = [
     cover: "/assets/projects/YABus.webp",
     siteUrl: "https://busapp.avianjay.sbs/",
   },
-
 ];

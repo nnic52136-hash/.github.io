@@ -88,18 +88,29 @@ export default async function LikeDetailPage({ params }: Props) {
           )}
         </div>
 
-        <h1 style={{ fontSize: "2.2rem", fontWeight: "bold", margin: "0.5rem 0" }}>
+        <h1
+          style={{ fontSize: "2.2rem", fontWeight: "bold", margin: "0.5rem 0" }}
+        >
           {item.title}
         </h1>
 
         {item.subtitle && (
-          <p style={{ fontSize: "1.1rem", opacity: 0.8, marginBottom: "0.5rem" }}>
+          <p
+            style={{ fontSize: "1.1rem", opacity: 0.8, marginBottom: "0.5rem" }}
+          >
             {item.subtitle}
           </p>
         )}
 
         {item.tags && item.tags.length > 0 && (
-          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "0.75rem" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              flexWrap: "wrap",
+              marginTop: "0.75rem",
+            }}
+          >
             {item.tags.map((tag) => (
               <span key={tag} className="thought-tag" style={{ opacity: 0.8 }}>
                 #{tag}

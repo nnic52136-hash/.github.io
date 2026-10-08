@@ -44,7 +44,13 @@ function fmtDate(ts: string) {
   });
 }
 
-function ItemAvatar({ nick, avatar }: { nick: string; avatar?: string | null }) {
+function ItemAvatar({
+  nick,
+  avatar,
+}: {
+  nick: string;
+  avatar?: string | null;
+}) {
   return (
     <div className="guestbook-avatar" aria-hidden="true">
       {avatar ? (
@@ -140,7 +146,11 @@ export default function Guestbook({ path }: { path: string }) {
     }
   };
 
-  const openReply = (commentId: string, parentId: string, replyToNick: string) => {
+  const openReply = (
+    commentId: string,
+    parentId: string,
+    replyToNick: string
+  ) => {
     setReplyTarget({ commentId, parentId, replyToNick });
     setReplyForm({
       nick: localStorage.getItem(STORAGE_KEYS.NICK) || nick,
@@ -196,7 +206,10 @@ export default function Guestbook({ path }: { path: string }) {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>, isReply = false) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement>,
+    isReply = false
+  ) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
       e.preventDefault();
       if (isReply) {
@@ -237,7 +250,9 @@ export default function Guestbook({ path }: { path: string }) {
               id="gb-r-mail"
               type="email"
               value={replyForm.email}
-              onChange={(e) => setReplyForm((f) => ({ ...f, email: e.target.value }))}
+              onChange={(e) =>
+                setReplyForm((f) => ({ ...f, email: e.target.value }))
+              }
               maxLength={254}
             />
           </div>
@@ -283,10 +298,18 @@ export default function Guestbook({ path }: { path: string }) {
   };
 
   /* ---- 遞迴渲染回覆 ---- */
-  const renderReply = (reply: Reply, rootReplies: Reply[], commentId: string): React.ReactNode => {
+  const renderReply = (
+    reply: Reply,
+    rootReplies: Reply[],
+    commentId: string
+  ): React.ReactNode => {
     const children = rootReplies.filter((r) => r.parentId === reply.id);
     return (
-      <div key={reply.id} id={`gb-${reply.id}`} className="guestbook-reply-item">
+      <div
+        key={reply.id}
+        id={`gb-${reply.id}`}
+        className="guestbook-reply-item"
+      >
         <div className="guestbook-reply-body">
           <ItemAvatar nick={reply.nick} avatar={reply.avatar} />
           <div className="guestbook-body">
@@ -313,12 +336,17 @@ export default function Guestbook({ path }: { path: string }) {
               </button>
             </div>
             <p className="guestbook-text" style={{ whiteSpace: "pre-wrap" }}>
-              <span className="guestbook-reply-to">回覆 @{reply.replyToNick}</span> {reply.text}
+              <span className="guestbook-reply-to">
+                回覆 @{reply.replyToNick}
+              </span>{" "}
+              {reply.text}
             </p>
             {replyTarget?.parentId === reply.id && renderReplyForm()}
             {children.length > 0 && (
               <div className="guestbook-replies">
-                {children.map((child) => renderReply(child, rootReplies, commentId))}
+                {children.map((child) =>
+                  renderReply(child, rootReplies, commentId)
+                )}
               </div>
             )}
           </div>
@@ -330,7 +358,9 @@ export default function Guestbook({ path }: { path: string }) {
   const renderComment = (en: Entry): React.ReactNode => {
     const rootReplies = en.replies ?? [];
     const ids = new Set([en.id, ...rootReplies.map((r) => r.id)]);
-    const direct = rootReplies.filter((r) => r.parentId === en.id || !ids.has(r.parentId));
+    const direct = rootReplies.filter(
+      (r) => r.parentId === en.id || !ids.has(r.parentId)
+    );
     return (
       <li key={en.id} id={`gb-${en.id}`} className="guestbook-item">
         <ItemAvatar nick={en.nick} avatar={en.avatar} />
@@ -350,7 +380,9 @@ export default function Guestbook({ path }: { path: string }) {
             )}
             <span className="guestbook-date">{fmtDate(en.timestamp)}</span>
             {rootReplies.length > 0 && (
-              <span className="guestbook-reply-count">{rootReplies.length} 回覆</span>
+              <span className="guestbook-reply-count">
+                {rootReplies.length} 回覆
+              </span>
             )}
             <button
               type="button"

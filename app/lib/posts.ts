@@ -34,7 +34,7 @@ function calculateReadingStats(content: string) {
   const chineseChars = (cleanContent.match(/[\u4e00-\u9fa5]/g) || []).length;
   const nonChinese = cleanContent.replace(/[\u4e00-\u9fa5]/g, " ");
   const words = nonChinese.trim() ? nonChinese.trim().split(/\s+/) : [];
-  
+
   const totalWords = chineseChars + words.length;
   const readingTime = Math.max(1, Math.ceil(totalWords / 350));
 
@@ -81,7 +81,7 @@ export function getPostBySlug(slug: string): Post | null {
   try {
     const fullPathMdx = path.join(postsDirectory, `${slug}.mdx`);
     const fullPathMd = path.join(postsDirectory, `${slug}.md`);
-    
+
     let fullPath = "";
     if (fs.existsSync(fullPathMdx)) fullPath = fullPathMdx;
     else if (fs.existsSync(fullPathMd)) fullPath = fullPathMd;
@@ -103,10 +103,17 @@ export function getPostBySlug(slug: string): Post | null {
     return {
       slug,
       title: data.title || slug,
-      summary: data.summary || data.description || (fallbackSummary ? `${fallbackSummary}...` : "暫無文章摘要"),
+      summary:
+        data.summary ||
+        data.description ||
+        (fallbackSummary ? `${fallbackSummary}...` : "暫無文章摘要"),
       date: formatDate(data.date),
       cover: sanitizeCoverPath(rawCover),
-      tags: Array.isArray(data.tags) ? data.tags : data.tags ? [String(data.tags)] : [],
+      tags: Array.isArray(data.tags)
+        ? data.tags
+        : data.tags
+          ? [String(data.tags)]
+          : [],
       category: data.category || "未分類",
       series: data.series || null,
       seriesOrder: Number(data.seriesOrder) || 0,

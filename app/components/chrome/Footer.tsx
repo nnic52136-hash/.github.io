@@ -25,9 +25,21 @@ const SOCIAL_LINKS = [
     label: "Instagram",
     href: "https://www.instagram.com/dacsc_void_.0626",
   },
-  { icon: "github", label: "GitHub", href: "https://github.com/nnic52136-hash" },
-  { icon: "linkedin", label: "linkedin", href: "https://www.linkedin.com/in/%E9%98%BF-%E5%8E%9F-119932394/" },
-  { icon: "discord", label: "Discord", href: "https://discord.com/users/1408816377523077301" },
+  {
+    icon: "github",
+    label: "GitHub",
+    href: "https://github.com/nnic52136-hash",
+  },
+  {
+    icon: "linkedin",
+    label: "linkedin",
+    href: "https://www.linkedin.com/in/%E9%98%BF-%E5%8E%9F-119932394/",
+  },
+  {
+    icon: "discord",
+    label: "Discord",
+    href: "https://discord.com/users/1408816377523077301",
+  },
   { icon: "telegram", label: "Telegram", href: "https://t.me/yuan52136" },
 ];
 

@@ -12,7 +12,9 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ExperiencePage() {
   return (
-    <section style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 16px" }}>
+    <section
+      style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 16px" }}
+    >
       <PageHead
         kicker="EXPERIENCE & ACTIVITIES"
         title="經歷與活動"

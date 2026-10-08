@@ -77,8 +77,8 @@ export default function ExperienceTimeline({ groups, items }: Props) {
         const rowProgress = rect.height
           ? (triggerY - rect.top) / rect.height
           : passed
-          ? 1
-          : 0;
+            ? 1
+            : 0;
         el.style.setProperty(
           "--row-fill",
           String(Math.min(1, Math.max(0, rowProgress)))
@@ -140,7 +140,8 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                 transition: "all 0.2s ease",
               }}
             >
-              {tag !== "全部" && "#"}{tag}
+              {tag !== "全部" && "#"}
+              {tag}
             </button>
           );
         })}
@@ -148,7 +149,13 @@ export default function ExperienceTimeline({ groups, items }: Props) {
 
       {/* 時間軸清單 */}
       {filteredItems.length === 0 ? (
-        <div style={{ padding: "60px 0", color: "var(--dim)", textAlign: "center" }}>
+        <div
+          style={{
+            padding: "60px 0",
+            color: "var(--dim)",
+            textAlign: "center",
+          }}
+        >
           尚無此標籤的經歷項目 (´･ω･`)
         </div>
       ) : (
@@ -197,20 +204,53 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                       border: "1px solid var(--bd)",
                       transition: "all 0.25s ease",
                       borderColor: isHovered ? "var(--blue)" : "var(--bd)",
-                      boxShadow: isHovered ? "0 8px 24px var(--shadow)" : "none",
+                      boxShadow: isHovered
+                        ? "0 8px 24px var(--shadow)"
+                        : "none",
                       transform: isHovered ? "translateY(-2px)" : "none",
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "12px" }}>
-                      <div className="tl-title" style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--tx)", margin: 0 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        gap: "12px",
+                      }}
+                    >
+                      <div
+                        className="tl-title"
+                        style={{
+                          fontSize: "1.1rem",
+                          fontWeight: 600,
+                          color: "var(--tx)",
+                          margin: 0,
+                        }}
+                      >
                         {e.title}
                         {e.role && (
-                          <span style={{ fontSize: "0.85rem", opacity: 0.75, marginLeft: "8px", fontWeight: 400, color: "var(--dim)" }}>
+                          <span
+                            style={{
+                              fontSize: "0.85rem",
+                              opacity: 0.75,
+                              marginLeft: "8px",
+                              fontWeight: 400,
+                              color: "var(--dim)",
+                            }}
+                          >
                             · {e.role}
                           </span>
                         )}
                       </div>
-                      <div className="tl-period" style={{ fontSize: "0.85rem", fontFamily: "monospace", color: "var(--dim)", flexShrink: 0 }}>
+                      <div
+                        className="tl-period"
+                        style={{
+                          fontSize: "0.85rem",
+                          fontFamily: "monospace",
+                          color: "var(--dim)",
+                          flexShrink: 0,
+                        }}
+                      >
                         {displayPeriod}
                       </div>
                     </div>
@@ -221,24 +261,50 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                         maxHeight: isHovered ? "200px" : "0px",
                         opacity: isHovered ? 1 : 0,
                         overflow: "hidden",
-                        transition: "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin-top 0.25s ease",
+                        transition:
+                          "max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, margin-top 0.25s ease",
                         marginTop: isHovered ? "10px" : "0px",
                         borderTop: isHovered ? "1px solid var(--bd)" : "none",
                         paddingTop: isHovered ? "10px" : "0px",
                       }}
                     >
                       {orgText && (
-                        <div style={{ fontSize: "0.85rem", color: "var(--purple)", fontWeight: 500, marginBottom: "4px" }}>
+                        <div
+                          style={{
+                            fontSize: "0.85rem",
+                            color: "var(--purple)",
+                            fontWeight: 500,
+                            marginBottom: "4px",
+                          }}
+                        >
                           {orgText}
                         </div>
                       )}
                       {summaryText && (
-                        <div style={{ fontSize: "0.88rem", color: "var(--dim)", lineHeight: 1.5, marginBottom: "8px" }}>
+                        <div
+                          style={{
+                            fontSize: "0.88rem",
+                            color: "var(--dim)",
+                            lineHeight: 1.5,
+                            marginBottom: "8px",
+                          }}
+                        >
                           {summaryText}
                         </div>
                       )}
-                      <div style={{ fontSize: "0.82rem", color: "var(--blue)", fontWeight: 600, display: "flex", alignItems: "center", gap: "4px" }}>
-                        {e.hasDetail ? "閱讀完整心得 →" : "查看詳細資訊 (彈窗) →"}
+                      <div
+                        style={{
+                          fontSize: "0.82rem",
+                          color: "var(--blue)",
+                          fontWeight: 600,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px",
+                        }}
+                      >
+                        {e.hasDetail
+                          ? "閱讀完整心得 →"
+                          : "查看詳細資訊 (彈窗) →"}
                       </div>
                     </div>
                   </div>

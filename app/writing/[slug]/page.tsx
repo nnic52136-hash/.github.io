@@ -158,7 +158,10 @@ export default async function BlogPostPage({ params }: Props) {
           {/* 3. 文章數據 */}
           <div className="meta-group">
             <div className="meta-item-label">數據</div>
-            <div className="meta-item-val" style={{ fontSize: "0.82rem", opacity: 0.85 }}>
+            <div
+              className="meta-item-val"
+              style={{ fontSize: "0.82rem", opacity: 0.85 }}
+            >
               {post.wordCount || 0} 字 · {post.readingTime || 1} 分鐘
             </div>
           </div>
@@ -209,7 +212,10 @@ export default async function BlogPostPage({ params }: Props) {
         {/* =================================================================
            右側主內容：大標題 -> 純文字前言 -> MDX 內文
            ================================================================= */}
-        <main className="post-main-content" style={{ minWidth: 0, width: "100%" }}>
+        <main
+          className="post-main-content"
+          style={{ minWidth: 0, width: "100%" }}
+        >
           {/* 大標題 */}
           <h1
             style={{

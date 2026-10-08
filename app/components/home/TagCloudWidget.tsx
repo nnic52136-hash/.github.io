@@ -22,10 +22,12 @@ export default function TagCloudWidget() {
       const res = await fetch("/api/tags");
       const data = await res.json();
       if (data.tags) {
-        const parsed: TagData[] = Object.entries(data.tags).map(([name, value]) => ({
-          name,
-          value: Number(value),
-        }));
+        const parsed: TagData[] = Object.entries(data.tags).map(
+          ([name, value]) => ({
+            name,
+            value: Number(value),
+          })
+        );
         setRawTags(parsed);
       }
     } catch {
@@ -57,11 +59,16 @@ export default function TagCloudWidget() {
     }
 
     const computedStyle = getComputedStyle(document.documentElement);
-    const colorBlue = computedStyle.getPropertyValue("--blue").trim() || "#889CE8";
-    const colorPurple = computedStyle.getPropertyValue("--purple").trim() || "#D48CB3";
+    const colorBlue =
+      computedStyle.getPropertyValue("--blue").trim() || "#889CE8";
+    const colorPurple =
+      computedStyle.getPropertyValue("--purple").trim() || "#D48CB3";
     const colorTx = computedStyle.getPropertyValue("--tx").trim() || "#F3E8F2";
-    const colorDim = computedStyle.getPropertyValue("--dim").trim() || "#B599B7";
-    const shadowColor = computedStyle.getPropertyValue("--shadow").trim() || "rgba(5, 8, 20, 0.6)";
+    const colorDim =
+      computedStyle.getPropertyValue("--dim").trim() || "#B599B7";
+    const shadowColor =
+      computedStyle.getPropertyValue("--shadow").trim() ||
+      "rgba(5, 8, 20, 0.6)";
 
     const palette = [colorBlue, colorPurple, colorTx, colorDim];
 
@@ -220,7 +227,11 @@ export default function TagCloudWidget() {
           placeholder="留下你的印記..."
           maxLength={20}
         />
-        <button type="submit" className="cloud-btn" disabled={!inputTag.trim() || loading}>
+        <button
+          type="submit"
+          className="cloud-btn"
+          disabled={!inputTag.trim() || loading}
+        >
           送出
         </button>
       </form>

@@ -1,30 +1,31 @@
-export type ExperienceCategory = 'project' | 'organization' | 'contest' | 'volunteer' | 'education';
+export type ExperienceCategory =
+  "project" | "organization" | "contest" | "volunteer" | "education";
 
 export interface ExperienceItem {
   // 基礎資訊
   id: string;
   title: string;
-  organization?: string;     // 組織 / 單位 (例如: "QRACON 籌備團隊")
-  role?: string;             // 角色 / 職稱 (例如: "行銷組長")
+  organization?: string; // 組織 / 單位 (例如: "QRACON 籌備團隊")
+  role?: string; // 角色 / 職稱 (例如: "行銷組長")
 
   // 時間設定
-  startDate?: string;        // "YYYY-MM"
-  endDate?: string;          // "YYYY-MM" 或 "Present"
-  period?: string;           // 顯示文字 (例如: "2026.05 - 2026.09")
+  startDate?: string; // "YYYY-MM"
+  endDate?: string; // "YYYY-MM" 或 "Present"
+  period?: string; // 顯示文字 (例如: "2026.05 - 2026.09")
 
   // 分類與標籤
-  tags?: string[];           // 頂部快速篩選標籤 (例: ["活動籌備", "比賽"])
-  color: string;             // 色彩主題 ("purple" | "blue" | "green" 等)
+  tags?: string[]; // 頂部快速篩選標籤 (例: ["活動籌備", "比賽"])
+  color: string; // 色彩主題 ("purple" | "blue" | "green" 等)
 
   // 內容敘述
-  summary?: string;          // 卡片摘要 (Hover 展開顯示)
-  longDesc?: string;         // Modal 彈窗內的完整心得
+  summary?: string; // 卡片摘要 (Hover 展開顯示)
+  longDesc?: string; // Modal 彈窗內的完整心得
 
   // 跳轉模式與資源
-  hasDetail?: boolean;       // true: 導向 /experience/[slug]，false: 開啟 Modal 彈窗
-  slug?: string;             // 長文 MDX 檔名 (content/experience/[slug].mdx)
-  href?: string;             // 外部連結
-  images?: string[];         // Modal 彈窗圖片
+  hasDetail?: boolean; // true: 導向 /experience/[slug]，false: 開啟 Modal 彈窗
+  slug?: string; // 長文 MDX 檔名 (content/experience/[slug].mdx)
+  href?: string; // 外部連結
+  images?: string[]; // Modal 彈窗圖片
 
   // 舊欄位相容 (可選)
   org?: string;
@@ -107,7 +108,8 @@ export const EXPERIENCES: ExperienceItem[] = [
     period: "2026.05 - Now",
     tags: ["活動籌備"],
     color: "purple",
-    summary: "負責 QRACON 2026 全盤行銷策略、社群文案與薛丁格的貓主題視覺企劃。",
+    summary:
+      "負責 QRACON 2026 全盤行銷策略、社群文案與薛丁格的貓主題視覺企劃。",
     hasDetail: true,
     slug: "qracon-2026",
   },
@@ -121,7 +123,8 @@ export const EXPERIENCES: ExperienceItem[] = [
     color: "blue",
     summary: "學會為自己而活的地方，找一天認真寫篇文吧",
     hasDetail: false,
-    longDesc: "主要負責 社群公關、宣傳曝光、贊助對接、任務安排、跨組溝通、工具人",
+    longDesc:
+      "主要負責 社群公關、宣傳曝光、贊助對接、任務安排、跨組溝通、工具人",
     href: "https://www.instagram.com/p/DTt_e4JkU6I/",
     images: ["/assets/experience/Campfire.png"],
   },

@@ -110,7 +110,11 @@ export default function LikeCategorySection({
               <Link
                 key={`${cat.key}-${l.slug}`}
                 href={articleUrl}
-                style={{ textDecoration: "none", color: "inherit", display: "inline-block" }}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  display: "inline-block",
+                }}
               >
                 {cardElement}
               </Link>

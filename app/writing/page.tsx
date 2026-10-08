@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHead from "../components/PageHead";
 import WritingClient from "../components/writing/WritingClient";
 // 引入 post.ts 中專門為列表頁導出的輕量化函數
-import { getPostSummaries } from "../lib/posts"; 
+import { getPostSummaries } from "../lib/posts";
 import { pageMetadata } from "../lib/seo";
 
 const description = "長文寫作、技術教學連載與隨筆心得 φ(*￣0￣)";

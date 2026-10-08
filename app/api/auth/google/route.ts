@@ -3,7 +3,8 @@ import { normalizePath } from "../../../lib/path";
 
 export async function GET(req: NextRequest) {
   // 1. 取得使用者目前所在的文章網址（用於登入成功後跳回原文章）
-  const returnTo = normalizePath(req.nextUrl.searchParams.get("returnTo")) ?? "/";
+  const returnTo =
+    normalizePath(req.nextUrl.searchParams.get("returnTo")) ?? "/";
 
   // 2. 產生隨機 state 防止 CSRF 攻擊
   const state = crypto.randomUUID();
@@ -28,8 +29,16 @@ export async function GET(req: NextRequest) {
 
   // 4. 將 state 與回傳路徑存入 Cookie，並跳轉至 Google 登入頁
   const res = NextResponse.redirect(googleAuthUrl.toString());
-  res.cookies.set("google_oauth_state", state, { httpOnly: true, path: "/", maxAge: 600 });
-  res.cookies.set("google_oauth_return", returnTo, { httpOnly: true, path: "/", maxAge: 600 });
+  res.cookies.set("google_oauth_state", state, {
+    httpOnly: true,
+    path: "/",
+    maxAge: 600,
+  });
+  res.cookies.set("google_oauth_return", returnTo, {
+    httpOnly: true,
+    path: "/",
+    maxAge: 600,
+  });
 
   return res;
 }

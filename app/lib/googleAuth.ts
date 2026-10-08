@@ -5,7 +5,8 @@ import crypto from "crypto";
    夾帶這個 token。伺服器驗簽章＋過期時間，client 端沒辦法憑空偽造成任何帳號。 */
 
 // 讀取 Google 專用的簽署 Secret，若沒有可退回吃原本的 SECRET
-const SECRET = process.env.GUESTBOOK_GOOGLE_SECRET ?? process.env.GUESTBOOK_GH_SECRET ?? "";
+const SECRET =
+  process.env.GUESTBOOK_GOOGLE_SECRET ?? process.env.GUESTBOOK_GH_SECRET ?? "";
 const TTL_MS = 10 * 60 * 1000; // Token 有效期 10 分鐘
 
 export interface GoogleIdentity {

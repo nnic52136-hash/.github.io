@@ -38,7 +38,11 @@ export default function LikeCard({
             <img
               className="like-thumb-img"
               // 3. 修正原本只要有 layout 就套用圓形縮圖的 Bug
-              src={layout === "circle" ? likeCircleThumb(l.cover) : likeThumb(l.cover)}
+              src={
+                layout === "circle"
+                  ? likeCircleThumb(l.cover)
+                  : likeThumb(l.cover)
+              }
               alt={l.title}
               loading={priority ? "eager" : "lazy"}
               fetchPriority={priority ? "high" : undefined}

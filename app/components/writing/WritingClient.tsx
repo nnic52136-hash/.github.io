@@ -50,7 +50,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
 
   // 3. 統計「月份彙整」（例如：2026年 06月）
   const monthlyArchives = useMemo(() => {
-    const map: Record<string, { label: string; key: string; count: number }> = {};
+    const map: Record<string, { label: string; key: string; count: number }> =
+      {};
     posts.forEach((post) => {
       if (post.date && post.date.length >= 7) {
         const yearMonthKey = post.date.substring(0, 7); // e.g. "2026-06"
@@ -68,12 +69,18 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
   // 4. 多重條件過濾文章清單
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
-      const matchCategory = selectedCategory ? post.category === selectedCategory : true;
+      const matchCategory = selectedCategory
+        ? post.category === selectedCategory
+        : true;
       const matchTag = selectedTag ? post.tags?.includes(selectedTag) : true;
-      const matchMonth = selectedMonth ? post.date?.startsWith(selectedMonth) : true;
+      const matchMonth = selectedMonth
+        ? post.date?.startsWith(selectedMonth)
+        : true;
       const matchSearch = searchQuery
         ? post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          (post.summary || post.excerpt || "").toLowerCase().includes(searchQuery.toLowerCase())
+          (post.summary || post.excerpt || "")
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
         : true;
 
       return matchCategory && matchTag && matchMonth && matchSearch;
@@ -113,10 +120,18 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
     setSearchQuery("");
   };
 
-  const hasActiveFilter = selectedCategory || selectedTag || selectedMonth || searchQuery;
+  const hasActiveFilter =
+    selectedCategory || selectedTag || selectedMonth || searchQuery;
 
   return (
-    <div style={{ width: "100%", maxWidth: "1160px", margin: "0 auto", padding: "0 16px" }}>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "1160px",
+        margin: "0 auto",
+        padding: "0 16px",
+      }}
+    >
       {/* 響應式雙欄佈局：左側側邊欄、右側主要內容區 */}
       <div
         style={{
@@ -209,9 +224,13 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             >
               分類
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
               {categoryCounts.length === 0 ? (
-                <div style={{ fontSize: "0.82rem", color: "var(--dim)" }}>尚無分類</div>
+                <div style={{ fontSize: "0.82rem", color: "var(--dim)" }}>
+                  尚無分類
+                </div>
               ) : (
                 categoryCounts.map(([cat, count]) => {
                   const active = selectedCategory === cat;
@@ -296,7 +315,10 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                       transition: "all 0.15s ease",
                     }}
                   >
-                    #{tag} <span style={{ opacity: 0.65, fontSize: "0.7rem" }}>{count}</span>
+                    #{tag}{" "}
+                    <span style={{ opacity: 0.65, fontSize: "0.7rem" }}>
+                      {count}
+                    </span>
                   </button>
                 );
               })}
@@ -335,18 +357,26 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
               </span>
               <Link
                 href="/archives"
-                style={{ fontSize: "0.75rem", color: "var(--purple)", textDecoration: "none" }}
+                style={{
+                  fontSize: "0.75rem",
+                  color: "var(--purple)",
+                  textDecoration: "none",
+                }}
               >
                 完整歸檔 →
               </Link>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+            >
               {monthlyArchives.map((archive) => {
                 const active = selectedMonth === archive.key;
                 return (
                   <button
                     key={archive.key}
-                    onClick={() => setSelectedMonth(active ? null : archive.key)}
+                    onClick={() =>
+                      setSelectedMonth(active ? null : archive.key)
+                    }
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -362,7 +392,9 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                     }}
                   >
                     <span>{archive.label}</span>
-                    <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>({archive.count})</span>
+                    <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+                      ({archive.count})
+                    </span>
                   </button>
                 );
               })}
@@ -383,8 +415,17 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
               marginBottom: "20px",
             }}
           >
-            <div style={{ fontWeight: 600, letterSpacing: "0.05em", color: "var(--dim)", fontSize: "0.88rem" }}>
-              {viewMode === "timeline" ? `POSTS (${filteredPosts.length})` : "SERIES FOLDERS"}
+            <div
+              style={{
+                fontWeight: 600,
+                letterSpacing: "0.05em",
+                color: "var(--dim)",
+                fontSize: "0.88rem",
+              }}
+            >
+              {viewMode === "timeline"
+                ? `POSTS (${filteredPosts.length})`
+                : "SERIES FOLDERS"}
             </div>
 
             {/* 視圖切換按鈕 (時間線 / 系列資料夾) */}
@@ -407,7 +448,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                   fontWeight: 500,
                   border: "none",
                   cursor: "pointer",
-                  background: viewMode === "timeline" ? "var(--panel)" : "transparent",
+                  background:
+                    viewMode === "timeline" ? "var(--panel)" : "transparent",
                   color: viewMode === "timeline" ? "var(--tx)" : "var(--dim)",
                   transition: "all 0.2s ease",
                 }}
@@ -423,7 +465,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                   fontWeight: 500,
                   border: "none",
                   cursor: "pointer",
-                  background: viewMode === "folder" ? "var(--panel)" : "transparent",
+                  background:
+                    viewMode === "folder" ? "var(--panel)" : "transparent",
                   color: viewMode === "folder" ? "var(--tx)" : "var(--dim)",
                   transition: "all 0.2s ease",
                 }}
@@ -433,13 +476,28 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             </div>
           </div>
 
-          <div className="divider" style={{ height: "1px", background: "var(--bd)", marginBottom: "24px" }} />
+          <div
+            className="divider"
+            style={{
+              height: "1px",
+              background: "var(--bd)",
+              marginBottom: "24px",
+            }}
+          />
 
           {/* 無文章提示 */}
           {filteredPosts.length === 0 ? (
             <div style={{ textAlign: "center", padding: "60px 0" }}>
-              <div style={{ fontSize: "1.1rem", color: "var(--tx)" }}>沒有符合條件的文章</div>
-              <div style={{ fontSize: "0.875rem", color: "var(--dim)", marginTop: "8px" }}>
+              <div style={{ fontSize: "1.1rem", color: "var(--tx)" }}>
+                沒有符合條件的文章
+              </div>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: "var(--dim)",
+                  marginTop: "8px",
+                }}
+              >
                 請嘗試清除側邊欄的篩選條件或關鍵字
               </div>
             </div>
@@ -488,7 +546,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                         border: "1px solid var(--bd)",
                         background: "var(--panel)",
                         textDecoration: "none",
-                        transition: "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
+                        transition:
+                          "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
                       }}
                     >
                       {/* 低亮度背景封面圖 */}
@@ -503,7 +562,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                             opacity: 0.3,
                             filter: "brightness(0.35) contrast(1.1)",
                             zIndex: 0,
-                            transition: "transform 0.3s ease, opacity 0.3s ease",
+                            transition:
+                              "transform 0.3s ease, opacity 0.3s ease",
                           }}
                         />
                       )}
@@ -513,7 +573,8 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                         style={{
                           position: "absolute",
                           inset: 0,
-                          background: "linear-gradient(135deg, var(--panel) 25%, transparent 100%)",
+                          background:
+                            "linear-gradient(135deg, var(--panel) 25%, transparent 100%)",
                           zIndex: 1,
                         }}
                       />
@@ -531,7 +592,9 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                             color: "var(--dim)",
                           }}
                         >
-                          <span style={{ color: "var(--tx)", fontWeight: 500 }}>{post.date}</span>
+                          <span style={{ color: "var(--tx)", fontWeight: 500 }}>
+                            {post.date}
+                          </span>
                           {post.category && (
                             <span
                               style={{
@@ -546,7 +609,9 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                             </span>
                           )}
                           {post.wordCount && <span>• {post.wordCount} 字</span>}
-                          {post.readingTime && <span>• 閱讀 {post.readingTime} 分鐘</span>}
+                          {post.readingTime && (
+                            <span>• 閱讀 {post.readingTime} 分鐘</span>
+                          )}
                         </div>
 
                         <h2
@@ -580,7 +645,13 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                         )}
 
                         {post.tags && post.tags.length > 0 && (
-                          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "6px",
+                              flexWrap: "wrap",
+                            }}
+                          >
                             {post.tags.map((tag) => (
                               <span
                                 key={tag}
@@ -606,7 +677,13 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
             </div>
           ) : (
             /* ================= 原版系列資料夾模式 ================= */
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                gap: "20px",
+              }}
+            >
               {Object.entries(seriesMap).map(([seriesName, seriesPosts]) => (
                 <div
                   key={seriesName}
@@ -629,7 +706,14 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                       paddingBottom: "12px",
                     }}
                   >
-                    <h3 style={{ fontSize: "1.05rem", fontWeight: 600, margin: 0, color: "var(--tx)" }}>
+                    <h3
+                      style={{
+                        fontSize: "1.05rem",
+                        fontWeight: 600,
+                        margin: 0,
+                        color: "var(--tx)",
+                      }}
+                    >
                       {seriesName}
                     </h3>
                     <span
@@ -646,7 +730,13 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                     </span>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "8px",
+                    }}
+                  >
                     {seriesPosts.map((post, idx) => (
                       <Link
                         key={post.slug}
@@ -665,9 +755,24 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                           transition: "all 0.15s ease",
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px", overflow: "hidden" }}>
-                          <span style={{ fontSize: "0.78rem", color: "var(--dim)", minWidth: "18px" }}>
-                            {post.seriesOrder ? `#${post.seriesOrder}` : `#${idx + 1}`}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: "0.78rem",
+                              color: "var(--dim)",
+                              minWidth: "18px",
+                            }}
+                          >
+                            {post.seriesOrder
+                              ? `#${post.seriesOrder}`
+                              : `#${idx + 1}`}
                           </span>
                           <span
                             style={{
@@ -680,7 +785,14 @@ export default function WritingClient({ posts }: { posts: PostItem[] }) {
                             {post.title}
                           </span>
                         </div>
-                        <span style={{ fontSize: "0.75rem", color: "var(--dim)", flexShrink: 0, marginLeft: "8px" }}>
+                        <span
+                          style={{
+                            fontSize: "0.75rem",
+                            color: "var(--dim)",
+                            flexShrink: 0,
+                            marginLeft: "8px",
+                          }}
+                        >
                           {post.date}
                         </span>
                       </Link>

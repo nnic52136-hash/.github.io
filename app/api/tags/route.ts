@@ -19,7 +19,10 @@ export async function POST(req: Request) {
     // Rate Limit 防刷：同一個 IP 1 分鐘內最多送出 5 次標籤
     const allowed = await rateLimit(ip, "tags", 5, 60);
     if (!allowed) {
-      return NextResponse.json({ error: "點太快囉！請過一分鐘後再試" }, { status: 429 });
+      return NextResponse.json(
+        { error: "點太快囉！請過一分鐘後再試" },
+        { status: 429 }
+      );
     }
 
     const { tag } = await req.json().catch(() => ({}));

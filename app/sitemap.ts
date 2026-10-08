@@ -43,7 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 2. 文章列表主頁 (/writing)
     {
       url: `${SITE_URL}/writing`,
-      ...(newestPostTimestamp ? { lastModified: new Date(newestPostTimestamp) } : {}),
+      ...(newestPostTimestamp
+        ? { lastModified: new Date(newestPostTimestamp) }
+        : {}),
     },
 
     // 3. 所有單篇文章頁面 (/writing/[slug])

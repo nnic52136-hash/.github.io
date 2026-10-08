@@ -81,7 +81,10 @@ export async function GET(req: NextRequest) {
     });
 
     const res = NextResponse.redirect(
-      new URL(`${returnPath}?google_token=${encodeURIComponent(token)}`, req.url)
+      new URL(
+        `${returnPath}?google_token=${encodeURIComponent(token)}`,
+        req.url
+      )
     );
     res.cookies.delete("google_oauth_state");
     res.cookies.delete("google_oauth_return");

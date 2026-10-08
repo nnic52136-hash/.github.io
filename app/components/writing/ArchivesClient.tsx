@@ -22,7 +22,14 @@ export default function ArchivesClient({ posts }: { posts: PostItem[] }) {
   return (
     <div style={{ marginTop: "24px" }}>
       <div style={{ marginBottom: "20px" }}>
-        <Link href="/writing" style={{ color: "var(--dim)", textDecoration: "none", fontSize: "0.9rem" }}>
+        <Link
+          href="/writing"
+          style={{
+            color: "var(--dim)",
+            textDecoration: "none",
+            fontSize: "0.9rem",
+          }}
+        >
           ← 返回文章列表
         </Link>
       </div>
@@ -41,14 +48,30 @@ export default function ArchivesClient({ posts }: { posts: PostItem[] }) {
                 marginBottom: "16px",
               }}
             >
-              <h2 style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--tx)", margin: 0 }}>
+              <h2
+                style={{
+                  fontSize: "1.8rem",
+                  fontWeight: 700,
+                  color: "var(--tx)",
+                  margin: 0,
+                }}
+              >
                 {year}
               </h2>
-              <span style={{ fontSize: "0.85rem", color: "var(--dim)" }}>({yearPosts.length} 篇)</span>
+              <span style={{ fontSize: "0.85rem", color: "var(--dim)" }}>
+                ({yearPosts.length} 篇)
+              </span>
             </div>
 
             {/* 精簡時間線文章列表 */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", paddingLeft: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                paddingLeft: "8px",
+              }}
+            >
               {yearPosts.map((post) => {
                 const monthDay = post.date ? post.date.substring(5) : "";
 

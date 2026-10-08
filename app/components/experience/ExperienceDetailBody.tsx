@@ -8,7 +8,10 @@ export default function ExperienceDetailBody({
 }) {
   return (
     <>
-      <div className="proj-tags" style={{ marginTop: 4, display: "flex", gap: "6px", flexWrap: "wrap" }}>
+      <div
+        className="proj-tags"
+        style={{ marginTop: 4, display: "flex", gap: "6px", flexWrap: "wrap" }}
+      >
         <span className="proj-tag">{item.period}</span>
         {item.org && <span className="proj-tag">{item.org}</span>}
         {item.tags?.map((tag) => (
@@ -48,7 +51,9 @@ export default function ExperienceDetailBody({
       {item.longDesc && (
         <div className="proj-detail-section">
           <div className="card-kicker">詳細心得與內容</div>
-          <p className="about-p" style={{ whiteSpace: "pre-line" }}>{item.longDesc}</p>
+          <p className="about-p" style={{ whiteSpace: "pre-line" }}>
+            {item.longDesc}
+          </p>
         </div>
       )}
 

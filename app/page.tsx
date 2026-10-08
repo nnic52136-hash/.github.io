@@ -134,7 +134,7 @@ function HomeContent() {
             <HeroFace />
           </div>
         </div>
-        
+
         {/* 訪客留印牆 */}
         <div
           className="card quote-card tag-cloud-card"
@@ -189,8 +189,7 @@ function HomeContent() {
                 I saw,
                 <br />
                 I loved,
-                <br />
-                I lived.
+                <br />I lived.
               </div>
             </div>
             <span className="card-arrow-lg">↗</span>

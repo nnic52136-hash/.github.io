@@ -9,7 +9,6 @@ export const ROLES: Role[] = [
   { label: "Creater", color: "purple" },
 ];
 
-
 export const MARQUEE: string[] = [
   "ciallo (∠·ω )⌒★",
   "I'm Yase",

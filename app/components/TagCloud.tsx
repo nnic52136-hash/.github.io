@@ -31,11 +31,11 @@ function generateCloudLayout(items: TagData[]): TagData[] {
   // 依據 count 降冪排序
   const sorted = [...items].sort((a, b) => b.count - a.count);
   const result: TagData[] = new Array(sorted.length);
-  
+
   // 找出陣列中心點
   let left = Math.floor(sorted.length / 2);
   let right = left + 1;
-  
+
   // 最大值放正中間
   result[left] = sorted[0];
   left--;
@@ -62,7 +62,7 @@ export default function TagCloud() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  
+
   // 用於記錄剛剛被「+1」的標籤，以觸發流暢的長大動畫
   const [pulsingTag, setPulsingTag] = useState<string | null>(null);
 
@@ -71,10 +71,12 @@ export default function TagCloud() {
       const res = await fetch("/api/tags");
       const data = await res.json();
       if (data.tags) {
-        const parsed: TagData[] = Object.entries(data.tags).map(([text, count]) => ({
-          text,
-          count: Number(count),
-        }));
+        const parsed: TagData[] = Object.entries(data.tags).map(
+          ([text, count]) => ({
+            text,
+            count: Number(count),
+          })
+        );
         setTags(parsed);
       }
     } catch {
@@ -112,7 +114,9 @@ export default function TagCloud() {
     setTags((prev) => {
       const exists = prev.find((t) => t.text === cleanText);
       if (exists) {
-        return prev.map((t) => (t.text === cleanText ? { ...t, count: t.count + 1 } : t));
+        return prev.map((t) =>
+          t.text === cleanText ? { ...t, count: t.count + 1 } : t
+        );
       }
       return [...prev, { text: cleanText, count: 1 }];
     });
@@ -175,17 +179,24 @@ export default function TagCloud() {
           will-change: transform;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-          
+
           /* 核心物理過渡：針對 transform 與底色做極致平滑處理 */
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                      box-shadow 0.3s ease,
-                      background-color 0.2s ease;
+          transition:
+            transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+            box-shadow 0.3s ease,
+            background-color 0.2s ease;
         }
 
         /* 出現時的彈出動畫 */
         @keyframes popIn {
-          0% { transform: scale(0.4); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
+          0% {
+            transform: scale(0.4);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
         }
 
         .cloud-tag-pill:hover {
@@ -245,7 +256,7 @@ export default function TagCloud() {
         }
 
         .cloud-input:focus {
-          border-color: #7A8B74;
+          border-color: #7a8b74;
           box-shadow: 0 0 0 3px rgba(122, 139, 116, 0.2);
         }
 
@@ -263,7 +274,7 @@ export default function TagCloud() {
 
         .cloud-btn:hover:not(:disabled) {
           transform: translateY(-2px) scale(1.05);
-          box-shadow: 0 4px 12px var(--shadow, rgba(0,0,0,0.1));
+          box-shadow: 0 4px 12px var(--shadow, rgba(0, 0, 0, 0.1));
         }
 
         .cloud-btn:active:not(:disabled) {
@@ -278,54 +289,55 @@ export default function TagCloud() {
 
       {/* 文字雲展示區 */}
       <div className="cloud-space-stage">
-        {mounted && cloudTags.length > 0 ? (
-          cloudTags.map((t) => {
-            const ratio = maxCount === minCount ? 0.5 : (t.count - minCount) / (maxCount - minCount);
-            const hash = getTagHash(t.text);
-            const theme = SOLID_THEMES[hash % SOLID_THEMES.length];
-            const isMax = t.count === maxCount && maxCount > 1;
-            const isPulsing = pulsingTag === t.text;
+        {mounted && cloudTags.length > 0
+          ? cloudTags.map((t) => {
+              const ratio =
+                maxCount === minCount
+                  ? 0.5
+                  : (t.count - minCount) / (maxCount - minCount);
+              const hash = getTagHash(t.text);
+              const theme = SOLID_THEMES[hash % SOLID_THEMES.length];
+              const isMax = t.count === maxCount && maxCount > 1;
+              const isPulsing = pulsingTag === t.text;
 
-            // 完全依賴空間推擠與字體大小，搭配 transform 長大
-            const baseSize = 0.85 + ratio * 0.6; // 0.85rem ~ 1.45rem，級距拉開
-            const fontSize = `${baseSize.toFixed(2)}rem`;
-            const padding = isMax
-              ? "10px 24px"
-              : `${(6 + ratio * 4).toFixed(0)}px ${(14 + ratio * 8).toFixed(0)}px`;
-            
-            const borderRadius = "999px"; // 統一採用全圓角讓空間交錯更滑順
-            const fontWeight = isMax ? "800" : ratio >= 0.5 ? "700" : "600";
-            const offsetY = (hash % 9) - 4; // Y 軸交錯
+              // 完全依賴空間推擠與字體大小，搭配 transform 長大
+              const baseSize = 0.85 + ratio * 0.6; // 0.85rem ~ 1.45rem，級距拉開
+              const fontSize = `${baseSize.toFixed(2)}rem`;
+              const padding = isMax
+                ? "10px 24px"
+                : `${(6 + ratio * 4).toFixed(0)}px ${(14 + ratio * 8).toFixed(0)}px`;
 
-            return (
-              <button
-                key={t.text}
-                className={`cloud-tag-pill ${isMax ? "max-highlight" : ""} ${isPulsing ? "pulse-effect" : ""}`}
-                onClick={() => handleAddTag(t.text)}
-                style={{
-                  fontSize,
-                  padding,
-                  borderRadius,
-                  backgroundColor: theme.bg,
-                  color: theme.color,
-                  borderColor: theme.border,
-                  fontWeight,
-                  marginTop: `${offsetY}px`, // 打破水平對齊線
-                }}
-                title={`點擊為「${t.text}」+1（目前 ${t.count} 次）`}
-              >
-                <span>#{t.text}</span>
-                <span className="tag-count-badge">{t.count}</span>
-              </button>
-            );
-          })
-        ) : (
-          mounted && (
-            <span style={{ color: "var(--dim)", fontSize: "0.9rem" }}>
-              尚無印記，寫下第一個印象吧！
-            </span>
-          )
-        )}
+              const borderRadius = "999px"; // 統一採用全圓角讓空間交錯更滑順
+              const fontWeight = isMax ? "800" : ratio >= 0.5 ? "700" : "600";
+              const offsetY = (hash % 9) - 4; // Y 軸交錯
+
+              return (
+                <button
+                  key={t.text}
+                  className={`cloud-tag-pill ${isMax ? "max-highlight" : ""} ${isPulsing ? "pulse-effect" : ""}`}
+                  onClick={() => handleAddTag(t.text)}
+                  style={{
+                    fontSize,
+                    padding,
+                    borderRadius,
+                    backgroundColor: theme.bg,
+                    color: theme.color,
+                    borderColor: theme.border,
+                    fontWeight,
+                    marginTop: `${offsetY}px`, // 打破水平對齊線
+                  }}
+                  title={`點擊為「${t.text}」+1（目前 ${t.count} 次）`}
+                >
+                  <span>#{t.text}</span>
+                  <span className="tag-count-badge">{t.count}</span>
+                </button>
+              );
+            })
+          : mounted && (
+              <span style={{ color: "var(--dim)", fontSize: "0.9rem" }}>
+                尚無印記，寫下第一個印象吧！
+              </span>
+            )}
       </div>
 
       {/* SSR 真實渲染留印表單：取代骨架屏，杜絕閃爍 */}
@@ -343,18 +355,22 @@ export default function TagCloud() {
           onChange={(e) => setInputTag(e.target.value)}
           placeholder="寫下對我的印象..."
           maxLength={20}
-          disabled={!mounted || loading} 
+          disabled={!mounted || loading}
         />
-        <button 
-          type="submit" 
-          className="cloud-btn" 
+        <button
+          type="submit"
+          className="cloud-btn"
           disabled={!mounted || loading || !inputTag.trim()}
         >
           留印
         </button>
       </form>
 
-      {error && <p style={{ color: "#ef4444", fontSize: "0.8rem", margin: 0 }}>{error}</p>}
+      {error && (
+        <p style={{ color: "#ef4444", fontSize: "0.8rem", margin: 0 }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 }

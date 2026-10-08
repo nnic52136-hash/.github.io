@@ -12,8 +12,12 @@ const description = "Yase（亞瑟原 / 李中原）的個人簡介 (*´з｀*)"
 const INTEREST_BG = "/assets/likes/neko.webp";
 const MUSIC_BG = "/assets/likes/nacho.webp";
 
-const BOOKS_PREVIEW = LIKES_DATA.filter((item) => item.category === "books").slice(0, 4);
-const SINGERS_PREVIEW = LIKES_DATA.filter((item) => item.category === "singers").slice(0, 4);
+const BOOKS_PREVIEW = LIKES_DATA.filter(
+  (item) => item.category === "books"
+).slice(0, 4);
+const SINGERS_PREVIEW = LIKES_DATA.filter(
+  (item) => item.category === "singers"
+).slice(0, 4);
 
 export const metadata: Metadata = pageMetadata({
   title: "關於我",
@@ -65,9 +69,7 @@ export default function AboutPage() {
           />
           <div className="about-side-body">
             <div className="label">座右銘</div>
-            <div className="about-side-quote">
-              來世所及，皆為體驗
-            </div>
+            <div className="about-side-quote">來世所及，皆為體驗</div>
           </div>
         </div>
 

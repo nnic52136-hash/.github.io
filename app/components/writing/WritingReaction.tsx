@@ -59,10 +59,14 @@ export default function WritingReaction({
         outline: "none",
       }}
       onMouseEnter={(e) => {
-        if (!liked) e.currentTarget.style.borderColor = "var(--dim, rgba(255, 255, 255, 0.3))";
+        if (!liked)
+          e.currentTarget.style.borderColor =
+            "var(--dim, rgba(255, 255, 255, 0.3))";
       }}
       onMouseLeave={(e) => {
-        if (!liked) e.currentTarget.style.borderColor = "var(--bd, rgba(255, 255, 255, 0.12))";
+        if (!liked)
+          e.currentTarget.style.borderColor =
+            "var(--bd, rgba(255, 255, 255, 0.12))";
       }}
     >
       {/* 向量愛心 Icon */}
@@ -76,7 +80,8 @@ export default function WritingReaction({
         strokeLinecap="round"
         strokeLinejoin="round"
         style={{
-          transition: "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), fill 0.2s ease",
+          transition:
+            "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), fill 0.2s ease",
           transform: isAnimating ? "scale(1.35)" : "scale(1)",
         }}
       >
@@ -91,7 +96,9 @@ export default function WritingReaction({
           width: "3px",
           height: "3px",
           borderRadius: "50%",
-          background: liked ? "rgba(244, 63, 94, 0.6)" : "var(--dim, rgba(255, 255, 255, 0.3))",
+          background: liked
+            ? "rgba(244, 63, 94, 0.6)"
+            : "var(--dim, rgba(255, 255, 255, 0.3))",
           margin: "0 1px",
         }}
       />

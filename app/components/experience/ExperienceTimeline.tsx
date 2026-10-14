@@ -674,7 +674,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
           desc={[
             activeItem.summary,
             Array.isArray(activeItem.organization || activeItem.org)
-              ? (activeItem.organization || activeItem.org as string[]).join(" · ")
+              ? ((activeItem.organization || activeItem.org) as string[]).join(" · ")
               : (activeItem.organization || activeItem.org),
           ]
             .filter(Boolean)

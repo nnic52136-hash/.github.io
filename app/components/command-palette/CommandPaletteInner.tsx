@@ -71,13 +71,21 @@ const LINK_ITEMS: SearchItem[] = LINKS.map((l, i) => ({
   category: "知交",
 }));
 
-const EXPERIENCE_ITEMS: SearchItem[] = EXPERIENCE.map((e, i) => ({
-  id: `exp-${i}`,
-  title: e.title,
-  sub: e.org,
-  href: "/experience",
-  category: "閱歷",
-}));
+const EXPERIENCE_ITEMS: SearchItem[] = EXPERIENCE.map((e, i) => {
+  // 💡 確保 sub 欄位永遠是 string 或 undefined
+  const orgVal = e.organization || e.org;
+  const subText = Array.isArray(orgVal) 
+    ? orgVal.join(" · ") 
+    : (orgVal || undefined);
+
+  return {
+    id: `exp-${i}`,
+    title: e.title,
+    sub: subText,
+    href: e.href || `/experience`,
+    category: "經歷",
+  };
+});
 
 const ALL_ITEMS: SearchItem[] = [
   ...STATIC_PAGES,

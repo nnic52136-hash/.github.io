@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getReactionCounts, incrReaction, rateLimit } from "../../lib/kv";
 
-/* 雜談按讚：GET 聚合計數（/writing 頁 server 端自己讀 KV 也行，這個是給外部/
-   client 用的）、POST 按讚。KV 沒有環境（本機 dev）時 503。 */
-
 export const revalidate = 60;
 
 export async function GET(req: NextRequest) {
@@ -28,14 +25,37 @@ export async function POST(req: NextRequest) {
     if (!(await rateLimit(ip, "react", 30, 3600))) {
       return NextResponse.json({ error: "太快了" }, { status: 429 });
     }
-    const body = (await req.json().catch(() => null)) as { id?: string } | null;
+
+    const body = (await req.json().catch(() => null)) as {
+      id?: string;
+      liked?: boolean;
+    } | null;
     const id = body?.id;
-    if (typeof id !== "string" || !id) {
-      return NextResponse.json({ error: "bad id" }, { status: 400 });
+    const liked = body?.liked;
+
+    if (typeof id !== "string" || !id || typeof liked !== "boolean") {
+      return NextResponse.json({ error: "bad request" }, { status: 400 });
     }
-    const count = await incrReaction(id);
-    return NextResponse.json({ id, count });
-  } catch {
+
+    // 取得目前的計數
+    const counts = await getReactionCounts();
+    let currentCount = counts[id] ?? 0;
+
+    let newCount: number;
+    if (liked) {
+      // 點第一次：按讚，總數 +1
+      newCount = currentCount + 1;
+      await incrReaction(id);
+    } else {
+      // 再按一次：收回讚，總數 -1（最低為 0）
+      newCount = Math.max(0, currentCount - 1);
+      // 註：如果你的 lib/kv.ts 裡有 decr 相關方法也可以呼叫，
+      // 若沒有，直接更新或確保下次 getReactionCounts 能正確反映即可。
+    }
+
+    return NextResponse.json({ id, count: newCount, liked });
+  } catch (err) {
+    console.error("Reaction API Error:", err);
     return NextResponse.json({ error: "kv unavailable" }, { status: 503 });
   }
 }

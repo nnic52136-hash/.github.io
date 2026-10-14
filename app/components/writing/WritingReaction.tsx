@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface WritingReactionProps {
-  id: string;
+  id: string; // 文章 slug
   initialCount?: number;
   size?: "sm" | "md" | "lg";
 }
@@ -17,16 +17,69 @@ export default function WritingReaction({
   const [liked, setLiked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const handleLike = () => {
+  // 1. 初始化：從 localStorage 讀取按讚狀態，並向 API 抓取最新總數
+  useEffect(() => {
+    let isMounted = true;
+
+    const storedLiked = localStorage.getItem(`liked_${id}`) === "true";
+    setLiked(storedLiked);
+
+    async function fetchReaction() {
+      try {
+        const res = await fetch(`/api/reactions?ids=${encodeURIComponent(id)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data && typeof data[id] === "number") {
+            setCount(data[id]);
+          }
+        }
+      } catch (error) {
+        console.error("無法取得按讚資料:", error);
+      }
+    }
+
+    fetchReaction();
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  // 2. 點擊按讚 / 收回讚
+  const handleLike = async () => {
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 250);
 
-    if (liked) {
-      setCount((prev) => Math.max(0, prev - 1));
-      setLiked(false);
-    } else {
-      setCount((prev) => prev + 1);
-      setLiked(true);
+    const nextLikedState = !liked;
+    const nextCount = nextLikedState ? count + 1 : Math.max(0, count - 1);
+
+    // 立即更新前端畫面與 localStorage (樂觀更新，不卡頓)
+    setLiked(nextLikedState);
+    setCount(nextCount);
+    localStorage.setItem(`liked_${id}`, String(nextLikedState));
+
+    try {
+      const res = await fetch("/api/reactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, liked: nextLikedState }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof data.count === "number") {
+          setCount(data.count);
+        }
+      } else {
+        // 如果 API 失敗，將狀態默默還原
+        setLiked(liked);
+        setCount(count);
+        localStorage.setItem(`liked_${id}`, String(liked));
+      }
+    } catch (error) {
+      console.error("按讚同步失敗:", error);
+      setLiked(liked);
+      setCount(count);
+      localStorage.setItem(`liked_${id}`, String(liked));
     }
   };
 
@@ -58,18 +111,7 @@ export default function WritingReaction({
         userSelect: "none",
         outline: "none",
       }}
-      onMouseEnter={(e) => {
-        if (!liked)
-          e.currentTarget.style.borderColor =
-            "var(--dim, rgba(255, 255, 255, 0.3))";
-      }}
-      onMouseLeave={(e) => {
-        if (!liked)
-          e.currentTarget.style.borderColor =
-            "var(--bd, rgba(255, 255, 255, 0.12))";
-      }}
     >
-      {/* 向量愛心 Icon */}
       <svg
         width="17"
         height="17"
@@ -90,7 +132,6 @@ export default function WritingReaction({
 
       <span>讚</span>
 
-      {/* 精緻圓點分隔替代原版豎線 */}
       <span
         style={{
           width: "3px",
@@ -103,7 +144,6 @@ export default function WritingReaction({
         }}
       />
 
-      {/* 數字欄位 (等寬數字防跳動) */}
       <span
         style={{
           fontVariantNumeric: "tabular-nums",

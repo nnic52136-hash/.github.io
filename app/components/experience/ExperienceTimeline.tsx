@@ -16,36 +16,172 @@ export default function ExperienceTimeline({ groups, items }: Props) {
   const timelineEls = useRef<Set<HTMLDivElement>>(new Set());
   const rowEls = useRef<Set<HTMLDivElement>>(new Set());
   const [activeItem, setActiveItem] = useState<ExperienceItem | null>(null);
-  const [selectedTag, setSelectedTag] = useState<string>("全部");
+
+  const [viewMode, setViewMode] = useState<"timeline" | "archive">("timeline");
+  
+  // 🔥 6 大維度的多選狀態 (每個維度對應一個陣列，支援複選)
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   timelineEls.current.clear();
   rowEls.current.clear();
 
-  // 1. 統一解析傳入的經歷資料
+  // 1. 統一解析並去重傳入的經歷資料
   const rawItems = useMemo(() => {
-    if (items && items.length > 0) return items;
-    if (groups && groups.length > 0) {
-      return groups.flatMap(([_, groupItems]) => groupItems);
+    let list: ExperienceItem[] = [];
+    if (items && items.length > 0) {
+      list = items;
+    } else if (groups && groups.length > 0) {
+      list = groups.flatMap(([_, groupItems]) => groupItems);
     }
-    return [];
+    const map = new Map<string, ExperienceItem>();
+    list.forEach((item) => {
+      if (item && item.id) map.set(item.id, item);
+    });
+    return Array.from(map.values());
   }, [groups, items]);
 
-  // 2. 🔥 動態從所有經歷的 tags 中萃取出不重複的標籤清單，並自動加上「全部」
-  const dynamicFilterTags = useMemo(() => {
-    const tagSet = new Set<string>();
+  // 2. 🔥 動態從所有經歷的屬性與 tags 中自動萃取出 6 大維度的選項 (強制獨立拆解字串與陣列)
+  const dynamicDimensions = useMemo(() => {
+    const types = new Set<string>();
+    const orgs = new Set<string>();
+    const domains = new Set<string>();
+    const topics = new Set<string>();
+    const roles = new Set<string>();
+    const statuses = new Set<string>();
+
+    // 💡 強化版：無論是字串、陣列，皆透過逗號或斜線徹底拆解為獨立標籤
+    const addValues = (val: string | string[] | undefined, set: Set<string>) => {
+      if (!val) return;
+      const rawList = Array.isArray(val) ? val : [val];
+      rawList.forEach((item) => {
+        if (typeof item !== "string") return;
+        // 同時支援逗號與中文逗號拆解
+        item.split(/[,，]/).forEach((v) => {
+          const clean = v.trim();
+          if (clean) set.add(clean);
+        });
+      });
+    };
+
     rawItems.forEach((item) => {
-      item.tags?.forEach((t) => tagSet.add(t));
+      addValues(item.type, types);
+      addValues(item.organization || item.org, orgs);
+      addValues(item.domain, domains);
+      addValues(item.topic, topics);
+      addValues(item.role, roles);
+      addValues(item.status, statuses);
+      
+      // 兼容 tags 自動歸納
+      item.tags?.forEach((t) => {
+        const clean = t.trim();
+        if (["學歷", "比賽", "實習", "社團", "營隊志工", "創業", "擺攤", "展覽"].includes(clean)) types.add(clean);
+        if (["校內", "人社圈", "資訊圈", "辯論圈", "學治圈", "文學圈", "技職圈"].includes(clean)) domains.add(clean);
+      });
     });
-    return ["全部", ...Array.from(tagSet)];
+
+    return {
+      "參與類型 (Type)": Array.from(types),
+      "組織團隊 (Organization)": Array.from(orgs),
+      "領域圈子 (Domain)": Array.from(domains),
+      "主題技能 (Topic)": Array.from(topics),
+      "角色 (Role)": Array.from(roles),
+      "階段狀態 (Status)": Array.from(statuses),
+    };
   }, [rawItems]);
 
-  // 3. 標籤快速篩選
+  // 3. 多維度複合過濾（支援獨立拆解比對）
   const filteredItems = useMemo(() => {
-    if (selectedTag === "全部") return rawItems;
-    return rawItems.filter((item) => item.tags?.includes(selectedTag));
-  }, [rawItems, selectedTag]);
+    return rawItems.filter((item) => {
+      const itemTags = item.tags?.map((t) => t.trim()) || [];
 
+      // 💡 強化版：檢查欄位（字串或陣列）是否包含特定標籤（支援逗號分隔字串的獨立比對）
+      const checkMatch = (field: string | string[] | undefined, val: string) => {
+        if (!field) return false;
+        const list = Array.isArray(field) ? field : [field];
+        return list.some((f) => {
+          if (typeof f !== "string") return false;
+          return f.split(/[,，]/).map((s) => s.trim()).includes(val);
+        });
+      };
+
+      for (const [dimName, selectedValues] of Object.entries(selectedFilters)) {
+        if (!selectedValues || selectedValues.length === 0) continue;
+
+        let matchesThisDimension = false;
+        for (const val of selectedValues) {
+          let match = false;
+          if (dimName.includes("參與類型")) {
+            match = checkMatch(item.type, val) || itemTags.includes(val);
+          } else if (dimName.includes("組織團隊")) {
+            match = checkMatch(item.organization || item.org, val);
+          } else if (dimName.includes("領域圈子")) {
+            match = checkMatch(item.domain, val) || itemTags.includes(val);
+          } else if (dimName.includes("主題技能")) {
+            match = checkMatch(item.topic, val) || itemTags.includes(val);
+          } else if (dimName.includes("角色")) {
+            match = checkMatch(item.role, val);
+          } else if (dimName.includes("階段狀態")) {
+            match = checkMatch(item.status, val);
+          }
+
+          if (match) {
+            matchesThisDimension = true;
+            break;
+          }
+        }
+
+        if (!matchesThisDimension) return false;
+      }
+      return true;
+    });
+  }, [rawItems, selectedFilters]);
+
+  // 4. 按年份歸檔分組
+  const archivedGroups = useMemo(() => {
+    const map: Record<string, ExperienceItem[]> = {};
+    filteredItems.forEach((item) => {
+      const p = item.period || item.startDate || "其他";
+      const match = p.match(/\b(20\d{2}|19\d{2})\b/);
+      const year = match ? `${match[1]} 年` : "未定年份";
+
+      if (!map[year]) map[year] = [];
+      map[year].push(item);
+    });
+    return Object.entries(map).sort(([a], [b]) => b.localeCompare(a));
+  }, [filteredItems]);
+
+  // 多選點擊切換
+  const handleTagClick = (dimName: string, val: string) => {
+    setSelectedFilters((prev) => {
+      const currentList = prev[dimName] || [];
+      let updatedList: string[];
+
+      if (currentList.includes(val)) {
+        updatedList = currentList.filter((item) => item !== val);
+      } else {
+        updatedList = [...currentList, val];
+      }
+
+      const copy = { ...prev };
+      if (updatedList.length === 0) {
+        delete copy[dimName];
+      } else {
+        copy[dimName] = updatedList;
+      }
+      return copy;
+    });
+  };
+
+  const handleClearAll = () => setSelectedFilters({});
+  
+  const totalActiveFiltersCount = Object.values(selectedFilters).reduce(
+    (sum, list) => sum + list.length, 
+    0
+  );
+  const hasActiveFilters = totalActiveFiltersCount > 0;
+
+  // 時間線隨滑動變色的進度監聽動畫
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -99,7 +235,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [filteredItems]);
+  }, [filteredItems, viewMode]);
 
   const handleCardClick = (item: ExperienceItem) => {
     if (item.hasDetail && item.slug) {
@@ -111,54 +247,183 @@ export default function ExperienceTimeline({ groups, items }: Props) {
 
   return (
     <div style={{ width: "100%", maxWidth: "900px", margin: "0 auto" }}>
-      {/* 頂部動態生成標籤列（改為自動讀取資料中的 tags） */}
+      {/* 頂部切換功能列與視圖模式 */}
       <div
         style={{
           display: "flex",
-          gap: "8px",
-          flexWrap: "wrap",
-          marginBottom: "32px",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "20px",
         }}
       >
-        {dynamicFilterTags.map((tag) => {
-          const isActive = selectedTag === tag;
-          return (
+        <div
+          style={{
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            color: "var(--dim)",
+            letterSpacing: "0.05em",
+          }}
+        >
+          EXPERIENCES ({filteredItems.length})
+        </div>
+
+        <div
+          style={{
+            display: "inline-flex",
+            gap: "4px",
+            background: "var(--inset)",
+            padding: "4px",
+            borderRadius: "8px",
+            border: "1px solid var(--bd)",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setViewMode("timeline")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              border: "none",
+              cursor: "pointer",
+              background: viewMode === "timeline" ? "var(--panel)" : "transparent",
+              color: viewMode === "timeline" ? "var(--tx)" : "var(--dim)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            時間線
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("archive")}
+            style={{
+              padding: "6px 14px",
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              border: "none",
+              cursor: "pointer",
+              background: viewMode === "archive" ? "var(--panel)" : "transparent",
+              color: viewMode === "archive" ? "var(--tx)" : "var(--dim)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            歸檔列表
+          </button>
+        </div>
+      </div>
+
+      {/* 6 大維度自動生成面板 (支援多選) */}
+      <div
+        style={{
+          background: "var(--panel)",
+          padding: "18px 22px",
+          borderRadius: "14px",
+          border: "1px solid var(--bd)",
+          marginBottom: "32px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderBottom: "1px solid var(--bd)",
+            paddingBottom: "12px",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "0.85rem",
+              fontWeight: 700,
+              color: "var(--tx)",
+            }}
+          >
+            自動檢索面板 (各分類支援複選)
+          </span>
+          {hasActiveFilters && (
             <button
-              key={tag}
               type="button"
-              onClick={() => setSelectedTag(tag)}
+              onClick={handleClearAll}
               style={{
-                padding: "6px 14px",
-                borderRadius: "20px",
-                fontSize: "0.85rem",
-                fontWeight: isActive ? 600 : 400,
-                border: "1px solid",
-                borderColor: isActive ? "var(--blue)" : "var(--bd)",
-                background: isActive ? "var(--blue)" : "var(--inset)",
-                color: isActive ? "var(--btntx, #000)" : "var(--tx)",
+                background: "transparent",
+                border: "none",
+                color: "var(--blue)",
+                fontSize: "0.8rem",
                 cursor: "pointer",
-                transition: "all 0.2s ease",
+                fontWeight: 600,
               }}
             >
-              {tag !== "全部" && "#"}
-              {tag}
+              清除所有篩選 ({totalActiveFiltersCount}) ✕
             </button>
+          )}
+        </div>
+
+        {Object.entries(dynamicDimensions).map(([dimName, values]) => {
+          if (values.length === 0) return null;
+          const currentSelectedList = selectedFilters[dimName] || [];
+
+          return (
+            <div
+              key={dimName}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "0.78rem",
+                  color: "var(--dim)",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {dimName}
+              </span>
+              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                {values.map((val) => {
+                  const isActive = currentSelectedList.includes(val);
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => handleTagClick(dimName, val)}
+                      style={{
+                        padding: "4px 12px",
+                        borderRadius: "16px",
+                        fontSize: "0.8rem",
+                        border: "1px solid",
+                        borderColor: isActive ? "var(--blue)" : "var(--bd)",
+                        background: isActive ? "var(--blue)" : "var(--inset)",
+                        color: isActive ? "var(--btntx, #000)" : "var(--tx)",
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      {dimName.includes("Role") ? val : `#${val}`}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* 時間軸清單 */}
+      {/* 內容渲染區 */}
       {filteredItems.length === 0 ? (
-        <div
-          style={{
-            padding: "60px 0",
-            color: "var(--dim)",
-            textAlign: "center",
-          }}
-        >
-          尚無此標籤的經歷項目 (´･ω･`)
+        <div style={{ padding: "60px 0", color: "var(--dim)", textAlign: "center" }}>
+          找不到符合條件的經歷項目 (´･ω･`)
         </div>
-      ) : (
+      ) : viewMode === "timeline" ? (
+        /* 時間線模式 (帶有滾動填色特效) */
         <div className="timeline-group" style={{ marginBottom: "28px" }}>
           <div
             className="exp-timeline"
@@ -170,7 +435,12 @@ export default function ExperienceTimeline({ groups, items }: Props) {
               const itemId = e.id || `${e.title}-${i}`;
               const isHovered = hoveredId === itemId;
               const summaryText = e.summary || e.desc;
-              const orgText = e.organization || e.org;
+              
+              const orgVal = e.organization || e.org;
+              const orgText = Array.isArray(orgVal) ? orgVal.join(" · ") : orgVal;
+
+              const roleText = Array.isArray(e.role) ? e.role.join(" / ") : e.role;
+
               const displayPeriod =
                 e.period ||
                 (e.startDate
@@ -190,7 +460,6 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                     <span className={`exp-dot ${e.color ?? "blue"}`} />
                   </div>
 
-                  {/* 卡片主體 */}
                   <div
                     className={`tl-card ${e.color ?? "blue"}`}
                     onClick={() => handleCardClick(e)}
@@ -228,7 +497,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                         }}
                       >
                         {e.title}
-                        {e.role && (
+                        {roleText && (
                           <span
                             style={{
                               fontSize: "0.85rem",
@@ -238,7 +507,7 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                               color: "var(--dim)",
                             }}
                           >
-                            · {e.role}
+                            · {roleText}
                           </span>
                         )}
                       </div>
@@ -255,7 +524,6 @@ export default function ExperienceTimeline({ groups, items }: Props) {
                       </div>
                     </div>
 
-                    {/* 滑鼠 Hover 展開內容 */}
                     <div
                       style={{
                         maxHeight: isHovered ? "200px" : "0px",
@@ -313,18 +581,101 @@ export default function ExperienceTimeline({ groups, items }: Props) {
             })}
           </div>
         </div>
+      ) : (
+        /* 年份歸檔模式 */
+        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+          {archivedGroups.map(([year, yearItems]) => (
+            <div key={year}>
+              <h2
+                style={{
+                  fontSize: "1.4rem",
+                  fontFamily: "Shippori Mincho, serif",
+                  color: "var(--tx)",
+                  marginBottom: "14px",
+                  borderBottom: "1px solid var(--bd)",
+                  paddingBottom: "6px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{year}</span>
+                <span
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "var(--dim)",
+                    fontFamily: "sans-serif",
+                  }}
+                >
+                  {yearItems.length} 項經歷
+                </span>
+              </h2>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {yearItems.map((e) => {
+                  const roleText = Array.isArray(e.role) ? e.role.join(" / ") : e.role;
+                  return (
+                    <div
+                      key={e.id}
+                      onClick={() => handleCardClick(e)}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 14px",
+                        borderRadius: "8px",
+                        background: "var(--panel)",
+                        border: "1px solid var(--bd)",
+                        cursor: "pointer",
+                        transition: "all 0.15s ease",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <span
+                          style={{
+                            fontSize: "0.95rem",
+                            fontWeight: 600,
+                            color: "var(--tx)",
+                          }}
+                        >
+                          {e.title}
+                        </span>
+                        {roleText && (
+                          <span style={{ fontSize: "0.8rem", color: "var(--dim)" }}>
+                            ({roleText})
+                          </span>
+                        )}
+                      </div>
+                      <span
+                        style={{
+                          fontSize: "0.8rem",
+                          fontFamily: "monospace",
+                          color: "var(--dim)",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {e.period}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
 
-      {/* 彈窗 */}
+      {/* 彈窗 Modal */}
       {activeItem && (
         <ProjectModalShell
           kicker={activeItem.tags?.[0] ?? "經歷"}
           kickerColor={activeItem.color ?? "blue"}
           title={activeItem.title}
-          // 👈 組合你要的格式：summary · organization（若其中一個沒有則自動過濾、用 " · " 串接）
           desc={[
             activeItem.summary,
-            activeItem.organization || activeItem.org,
+            Array.isArray(activeItem.organization || activeItem.org)
+              ? (activeItem.organization || activeItem.org as string[]).join(" · ")
+              : (activeItem.organization || activeItem.org),
           ]
             .filter(Boolean)
             .join(" · ")}

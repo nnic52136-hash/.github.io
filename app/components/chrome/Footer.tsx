@@ -14,7 +14,7 @@ const NAV_LINKS = [
 ];
 
 const CONTACT_LINKS = [
-  { label: "電話：+886 930 333 587", href: "tel:+886930333587" },
+  //{ label: "電話：+886 930 333 587", href: "tel:+886930333587" },
   { label: "Email：nnic52136@gmail.com", href: "mailto:nnic52136@gmail.com" },
   { label: "Line：@yuan52136", href: "https://line.me/ti/p/Ov6_lWvKI9" },
 ];

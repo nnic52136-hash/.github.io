@@ -42,11 +42,17 @@ html.lenis body {
 }
 
 html {
-  zoom: 1.15;
   -webkit-tap-highlight-color: transparent;
   /* 隱藏全站捲軸：電腦版用 Lenis，手機版用瀏覽器原生捲動。 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* 舊版 Edge/IE */
+}
+
+/* 如果真的需要電腦版整體放大 15%，用 transform scale 取代 zoom，才不會被 Safari 卡死 */
+@media (min-width: 761px) {
+  body {
+    zoom: 1.15; /* 如果 Safari 還是不吃，最穩的是直接刪掉這行，靠 font-size 掌控全站 */
+  }
 }
 html::-webkit-scrollbar {
   display: none; /* Chrome / Safari / 新 Edge */
@@ -225,32 +231,42 @@ svg {
   --muted: var(--dim);
   --surface-subtle: var(--inset);
 }
+/* ---- 季節 accent ---- */
+/* 季節只調整藍紫強調色，不改變 --tx、--dim、--mute 等文字核心色 */
 
-/* ---- 季節 accent（SeasonTint 依日期設 data-season）---- */
+/* Halloween */
 :root[data-season="halloween"] {
-  --blue: #ffa84c;
-  --purple: #c08cff;
+  --blue: #9daaf0;
+  --purple: #d99abb;
 }
+
 :root[data-theme="light"][data-season="halloween"] {
-  --blue: #b06a00;
-  --purple: #7a3fd0;
+  --blue: #667761;
+  --purple: #b79492;
 }
+
+/* Christmas */
 :root[data-season="christmas"] {
-  --blue: #7ee7a0;
-  --purple: #ff8f8f;
+  --blue: #86d6a0;
+  --purple: #e7a0a0;
 }
+
 :root[data-theme="light"][data-season="christmas"] {
-  --blue: #1f7a3d;
-  --purple: #c02f2f;
+  --blue: #3f8060;
+  --purple: #a96d6d;
 }
+
+/* New Year */
 :root[data-season="newyear"] {
-  --blue: #f5c26b;
-  --purple: #d9a6f5;
+  --blue: #eac77b;
+  --purple: #d8b0f0;
 }
+
 :root[data-theme="light"][data-season="newyear"] {
-  --blue: #9a6b00;
-  --purple: #7a3fd0;
+  --blue: #8b6b1f;
+  --purple: #8460a8;
 }
+
 
 /* ---- Fonts shorthand ---- */
 .serif {
@@ -5485,7 +5501,7 @@ a.guestbook-nick:hover {
 .markdown-body p,
 .markdown-body li {
   color: var(--tx);
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
 /* 4. 連結與分隔線 */
@@ -5677,3 +5693,4 @@ html, body {
     margin-bottom: 24px !important; /* 與下方文章區域保持距離 */
   }
 }
+

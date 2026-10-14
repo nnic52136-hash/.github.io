@@ -17,7 +17,7 @@ export default function WritingReaction({
   const [liked, setLiked] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // 1. 初始化：從 localStorage 讀取按讚狀態，並向 API 抓取最新總數
+  // 1. 初始化：從 localStorage 讀取該訪客是否按過，並從 API 抓取伺服器最新的累積總數
   useEffect(() => {
     let isMounted = true;
 
@@ -52,7 +52,7 @@ export default function WritingReaction({
     const nextLikedState = !liked;
     const nextCount = nextLikedState ? count + 1 : Math.max(0, count - 1);
 
-    // 立即更新前端畫面與 localStorage (樂觀更新，不卡頓)
+    // 立即更新前端畫面與 localStorage（即時反應，不卡頓）
     setLiked(nextLikedState);
     setCount(nextCount);
     localStorage.setItem(`liked_${id}`, String(nextLikedState));
@@ -67,10 +67,10 @@ export default function WritingReaction({
       if (res.ok) {
         const data = await res.json();
         if (typeof data.count === "number") {
-          setCount(data.count);
+          setCount(data.count); // 採用伺服器回傳的真實最新總數
         }
       } else {
-        // 如果 API 失敗，將狀態默默還原
+        // 如果 API 失敗，默默將狀態復原
         setLiked(liked);
         setCount(count);
         localStorage.setItem(`liked_${id}`, String(liked));

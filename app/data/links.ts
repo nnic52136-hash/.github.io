@@ -19,6 +19,6 @@ export const LINKS: LinkItem[] = [
     handle: "不為了迎合別人委屈自己",
     href: "  https://wuzuantw.com ",
     desc: "30歲高中生",
-    avatar: " https://wuzuantw.com/images/wuzuan.png ",
+    avatar: " /assets/likes/wuzuan.png ",
   },
 ];

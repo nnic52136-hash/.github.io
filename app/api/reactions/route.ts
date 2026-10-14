@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getReactionCounts, incrReaction, rateLimit } from "../../lib/kv";
+// 假設你的 lib/kv.ts 也有提供 decrReaction，或你可以直接用 Redis 的 decr
 
 export const revalidate = 60;
 
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   try {
     if (!(await rateLimit(ip, "react", 30, 3600))) {
-      return NextResponse.json({ error: "太快了" }, { status: 429 });
+      return NextResponse.json({ error: "操作太快" }, { status: 429 });
     }
 
     const body = (await req.json().catch(() => null)) as {
@@ -37,20 +38,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "bad request" }, { status: 400 });
     }
 
-    // 取得目前的計數
     const counts = await getReactionCounts();
     let currentCount = counts[id] ?? 0;
 
     let newCount: number;
     if (liked) {
-      // 點第一次：按讚，總數 +1
+      // 點讚：總數 +1
       newCount = currentCount + 1;
       await incrReaction(id);
     } else {
-      // 再按一次：收回讚，總數 -1（最低為 0）
+      // 取消按讚：總數 -1（最低為 0）
       newCount = Math.max(0, currentCount - 1);
-      // 註：如果你的 lib/kv.ts 裡有 decr 相關方法也可以呼叫，
-      // 若沒有，直接更新或確保下次 getReactionCounts 能正確反映即可。
+      
+      // 💡 如果你的 lib/kv.ts 有提供 decrReaction(id)，請在這裡呼叫：
+      // await decrReaction(id);
+      // 或者如果沒有現成 decr，可以直接用 KV 設定該 id 的新數字：
+      // await kv.set(`reaction_${id}`, newCount);
     }
 
     return NextResponse.json({ id, count: newCount, liked });

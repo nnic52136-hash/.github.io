@@ -33,13 +33,13 @@ export default function AboutPage() {
         <div className="about-main">
           <div className="about-lead">這裡是原</div>
           <p className="about-p">
-            熱衷於 Web 開發、AI 自動化流程與軟硬體實驗的自學生。
+            想打一長串，但等我有空再說吧(
           </p>
           <p className="about-p">
-            專注於探索 Component-driven 系統架構、前端 UI/UX 設計與軟體建構。
+            在這節奏快的時代，我希望自己能專注在自我的發展，就如左右銘所寫：生活沒有意義，只為探索。
           </p>
           <p className="about-p">
-            除了寫程式與探索新技術外，平常也喜歡閱讀漫畫、音樂賞析與參與各類實體交流活動。
+            我希望提升我的元能力，我的思想，我的認知，只為更好感知這世界。
           </p>
           <div className="divider" />
           <div className="stat-grid">

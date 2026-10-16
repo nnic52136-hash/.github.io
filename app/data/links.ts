@@ -33,14 +33,14 @@ export const LINKS: LinkItem[] = [
     handle: "從哪裡跌倒就在那裡躺下",
     href: " https://casperlin100w.github.io/",
     desc: "這不是預備國手嗎",
-    avatar: " https://casperlin100w.github.io/image/sidebar/avatar.jpg",
+    avatar: "https://wsrv.nl/?url=casperlin100w.github.io/image/sidebar/avatar.jpg",
   },
   {
     name: " Robin",
     handle: "臭宅一個",
     href: " https://robin.nycu.cc/",
     desc: "是交大資安大佬快拜",
-    avatar: " https://robin-tw.xyz/avatar.jpg",
+    avatar: "https://wsrv.nl/?url=robin-tw.xyz/avatar.jpg",
   },
   {
     name: "吳鑽",
@@ -61,6 +61,7 @@ export const LINKS: LinkItem[] = [
     handle: "「我是傻逼」",
     href: "  https://graycat.me/",
     desc: "30歲高中生",
-    avatar: " https://gravatar.com/candidmysteriouslyd597bef2c0",
+    avatar: " https://wsrv.nl/?url=gravatar.com/candidmysteriouslyd597bef2c0",
   },
 ];
+//wsrv.nl/?url=

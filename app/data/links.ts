@@ -21,4 +21,12 @@ export const LINKS: LinkItem[] = [
     desc: "30歲高中生",
     avatar: " /assets/likes/wuzuan.png ",
   },
+  {
+    name: "ChenArnold",
+    handle: "總會有地上的生靈，敢於直面雷霆的威光",
+    href: "  https://arnold-e9b.pages.dev/",
+    desc: "學治大佬",
+    avatar: "https://arnold-e9b.pages.dev/assets/img/my-profile-img.jpg",
+  },
+  
 ];

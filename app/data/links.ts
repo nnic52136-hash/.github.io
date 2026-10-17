@@ -29,6 +29,13 @@ export const LINKS: LinkItem[] = [
     avatar: "https://flashing.tw/assets/avatar.png",
   },
   {
+    name: "yimang",
+    handle: "whatever",
+    href: " https://yimang.tw/ ",
+    desc: "北科帥朝 品味很好",
+    avatar: " https://yimang.tw/images/avatar.webp ",
+  },
+  {
     name: "凡凡",
     handle: "從哪裡跌倒就在那裡躺下",
     href: " https://casperlin100w.github.io/",

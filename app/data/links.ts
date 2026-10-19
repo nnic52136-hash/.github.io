@@ -47,7 +47,7 @@ export const LINKS: LinkItem[] = [
     handle: "臭宅一個",
     href: "https://robin.nycu.cc/",
     desc: "是交大資安大佬快拜",
-    avatar: "https://wsrv.nl/?url=robin-tw.xyz/avatar.jpg",
+    avatar: "https://avatars.githubusercontent.com/u/150093538?v=4",
   },
   {
     name: " Raymond Weng",
@@ -75,7 +75,6 @@ export const LINKS: LinkItem[] = [
     handle: "「我是傻逼」",
     href: "https://graycat.me/",
     desc: "30歲高中生",
-    avatar: "https://wsrv.nl/?url=gravatar.com/candidmysteriouslyd597bef2c0",
+    avatar: "https://gravatar.com/avatar/candidmysteriouslyd597bef2c0?s=200",
   },
 ];
-//wsrv.nl/?url=

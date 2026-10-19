@@ -213,3 +213,20 @@ export default function RootLayout({
     </html>
   );
 }
+// 加在檔案最上方或 useEffect 內（僅在客戶端執行）
+if (typeof window !== "undefined" && !window.requestIdleCallback) {
+  window.requestIdleCallback = function (callback: Function) {
+    const start = Date.now();
+    return setTimeout(function () {
+      callback({
+        didTimeout: false,
+        timeRemaining: function () {
+          return Math.max(0, 50 - (Date.now() - start));
+        },
+      });
+    }, 1) as unknown as number;
+  };
+  window.cancelIdleCallback = function (id: number) {
+    clearTimeout(id);
+  };
+}

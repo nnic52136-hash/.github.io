@@ -15,6 +15,13 @@ export const LINKS: LinkItem[] = [
     avatar: "https://github-io-sigma-ten.vercel.app/assets/brand/avatar.webp",
   },
   {
+    name: "伊藤蒼太",
+    handle: "人間になりたい",
+    href: "https://itousouta.me/",
+    desc: "中電會會長，是大佬",
+    avatar: "https://itousouta.me//assets/brand/avatar.webp",
+  },
+  {
     name: "twcat0503",
     handle: "我菜菜",
     href: "https://twcat0503.org/",

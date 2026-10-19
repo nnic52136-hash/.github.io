@@ -63,6 +63,27 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant" suppressHydrationWarning>
       <head>
+        {/* Safari / iOS requestIdleCallback 兼容補丁 */}
+        <Script id="ric-polyfill" strategy="beforeInteractive">
+          {`
+            if (typeof window !== 'undefined') {
+              window.requestIdleCallback = window.requestIdleCallback || function (cb) {
+                var start = Date.now();
+                return setTimeout(function () {
+                  cb({
+                    didTimeout: false,
+                    timeRemaining: function () {
+                      return Math.max(0, 50 - (Date.now() - start));
+                    }
+                  });
+                }, 1);
+              };
+              window.cancelIdleCallback = window.cancelIdleCallback || function (id) {
+                clearTimeout(id);
+              };
+            }
+          `}
+        </Script>
         {/* 防止主題亮暗閃爍 (FOUC) */}
         <script
           dangerouslySetInnerHTML={{
@@ -171,9 +192,6 @@ export default function RootLayout({
                   },
                   sameAs: [
                     SITE_URL,
-                    // 此處可放入你的真實社群連結，例如：
-                    // "https://github.com/your-username",
-                    // "https://x.com/your-username",
                   ],
                 },
               ],
@@ -212,21 +230,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
-// 加在檔案最上方或 useEffect 內（僅在客戶端執行）
-if (typeof window !== "undefined" && !window.requestIdleCallback) {
-  window.requestIdleCallback = function (callback: Function) {
-    const start = Date.now();
-    return setTimeout(function () {
-      callback({
-        didTimeout: false,
-        timeRemaining: function () {
-          return Math.max(0, 50 - (Date.now() - start));
-        },
-      });
-    }, 1) as unknown as number;
-  };
-  window.cancelIdleCallback = function (id: number) {
-    clearTimeout(id);
-  };
 }

@@ -84,4 +84,11 @@ export const LINKS: LinkItem[] = [
     desc: "30歲高中生",
     avatar: "https://gravatar.com/avatar/candidmysteriouslyd597bef2c0?s=200",
   },
+  {
+    name: "老祖",
+    handle: "保障每天至少三小時的睡眠",
+    href: " https://xn--0xv563d7vi.xn--3izn0l.xn--kpry57d/",
+    desc: "來杯雷卡，先生",
+    avatar: " https://xn--0xv563d7vi.xn--3izn0l.xn--kpry57d/avatar.webp",
+  },
 ];

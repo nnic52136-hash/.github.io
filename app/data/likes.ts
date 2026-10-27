@@ -96,6 +96,7 @@ export const LIKES: LikeItem[] = [
     hasDetail: true,
     slug: "green-book",
   },
+  // 音樂
   {
     id: "singer-1",
     category: "singers",
@@ -120,6 +121,30 @@ export const LIKES: LikeItem[] = [
     hasDetail: false,
     externalUrl: "https://youtu.be/7CVfTd-_qbc",
   },
+  {
+    id: "singer-3",
+    category: "singers",
+    title: "小さな恋のうた",
+    subtitle: "MONGOL800",
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkSGwjHFEGdEbhEbzH9lmgUFRLYynKP8tIZARTVkCq3w&s=10",
+    rating: 5,
+    tags: ["J-Rock", "Punk Rock"],
+    summary: "日本龐克搖滾樂團 MONGOL800 的經典代表作，以直白熱烈的旋律與歌詞傳遞純粹而真摯的青春思念。",
+    hasDetail: false,
+    externalUrl: "https://youtu.be/u8EkSB9zqnE",
+  },
+  {
+    id: "singer-4",
+    category: "singers",
+    title: "周旋",
+    subtitle: "王以太 Yitai Wang",
+    coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5pWeF0J7_FbPzyKAjeP3wJjbqIrHI3Xq8WME1zF21ZQ&s",
+    rating: 5,
+    tags: ["Hip-Hop", "Melodic Rap"],
+    summary: "王以太的經典旋律饒舌作品，以細膩流暢的韻律與歌詞呈現人在現實與情感環境中的折衝與周旋。",
+    hasDetail: false,
+    externalUrl: "https://www.youtube.com/watch?v=6WPWpadfJfI",
+  },
   // 🔥 新增：Creator 創作者分類範例資料
   {
     id: "creator-1",
@@ -133,6 +158,7 @@ export const LIKES: LikeItem[] = [
     hasDetail: false,
     externalUrl: "https://www.youtube.com/@shasha77",
   },
+  // 展覽
   {
     id: "spot-1",
     category: "spots",
@@ -288,6 +314,18 @@ export const LIKES: LikeItem[] = [
     summary: "參與一年一度的開源盛會 COSCUP，見證國內外開源社群、軟體工程與自由軟體文化的蓬勃發展與技術碰撞。",
     hasDetail: false,
     externalUrl: "https://coscup.org/2026/",
+  },
+  {
+    id: "spot-16",
+    category: "spots",
+    title: "首爾插畫展",
+    subtitle: "韓國最大插畫與視覺藝術盛會",
+    coverImage: "/assets/likes/spots/seoul-illustration-fair.webp",
+    rating: 5,
+    tags: ["插畫藝術", "視覺設計", "繪本創作", "國際展覽"],
+    summary: "參訪韓國首爾插畫展（The Seoul Illustration Fair），探索來自全球創作者的優秀插畫、角色設計與周邊藝術作品。",
+    hasDetail: false,
+    externalUrl: "https://sifintaipei.com.tw/",
   },
 ];
 // 同步導出 LIKES_DATA（別名相容）

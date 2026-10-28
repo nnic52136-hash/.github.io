@@ -84,7 +84,7 @@ export const LIKES: LikeItem[] = [
     hasDetail: true,
     slug: "atomic-habits",
   },
-    {
+  {
     id: "movie-1",
     category: "movies",
     title: "幸福綠皮書",
@@ -95,6 +95,30 @@ export const LIKES: LikeItem[] = [
     summary: "跨越種族與偏見的真摯友誼，兼具幽默與深刻思考的經典好片。",
     hasDetail: true,
     slug: "green-book",
+  },
+  {
+    id: "movie-2",
+    category: "movies",
+    title: "綠里奇蹟",
+    subtitle: "Frank Darabont",
+    coverImage: "/assets/likes/movies/the-green-mile.webp",
+    rating: 5,
+    tags: ["電影", "劇情", "奇幻經典"],
+    summary: "改編自史蒂芬·金同名小說，深刻探討人性善惡、生死奇蹟與監獄死囚區中人性光輝的震撼經典之作。",
+    hasDetail: false,
+    externalUrl: "https://www.catchplay.com/tw/video/c70e25b0-876e-403f-b123-2c057c5b81a4",
+  },
+  {
+    id: "movie-3",
+    category: "movies",
+    title: "進擊的巨人 THE LAST ATTACK",
+    subtitle: "林祐一郎 / MAPPA",
+    coverImage: "/assets/likes/movies/shingeki-the-last-attack.webp",
+    rating: 5,
+    tags: ["電影", "動畫", "史詩終章"],
+    summary: "將電視動畫完結篇重新重製升級的震撼劇場版，為艾連·葉卡與調查兵團的命運抉擇劃下最壯烈的句點。",
+    hasDetail: false,
+    externalUrl: "https://www.youtube.com/playlist?list=PL12UaAf_xzfpr7SoZ60tGNPpJvFxWs7I2",
   },
   // 音樂
   {

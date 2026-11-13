@@ -75,6 +75,9 @@ export default function TagCloudWidget() {
     const option: echarts.EChartsOption = {
       tooltip: {
         show: true,
+        // 安全修補：tooltip 預設 renderMode=html 會把訪客標籤名以 innerHTML 輸出（stored XSS）；
+        // richText 改以 canvas 文字渲染，完全不經 innerHTML。
+        renderMode: "richText",
         formatter: (params: any) => `${params.name}: ${params.value}`,
       },
       series: [
